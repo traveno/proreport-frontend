@@ -1,0 +1,10 @@
+#cache-input {
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
+}
+
+#logtext {
+    overflow: hidden;
+    resize: none;
+}
