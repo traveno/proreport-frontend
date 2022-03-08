@@ -18,6 +18,7 @@ export class AppComponent {
 
   dismissAlert() {
     this.databaseLoaded = true;
+    
   }
   
 }

@@ -6,7 +6,7 @@
     </div>
     <div class="row">
       <div *ngIf="!databaseLoaded">
-        <ngb-alert class="shadow" [dismissible]="true" (closed)="dismissAlert()">No database has been loaded</ngb-alert>
+        <ngb-alert class="shadow" [dismissible]="false" (closed)="dismissAlert()">No database has been loaded</ngb-alert>
       </div>
     </div>
     <div class="row">
@@ -17,7 +17,7 @@
       </div>
       <div class="col mt-2">
         <app-activity-overview></app-activity-overview>
-        
+        <app-connections></app-connections>
       </div>
     </div>
     <div class="row">
