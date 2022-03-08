@@ -1,1 +1,17 @@
-<p>connections works!</p>
+<div class="card shadow">
+  <div class="card-header">Connections</div>
+  <div class="card-body">
+    <div *ngIf="this.conns.getConnected()" style="color: green;">
+      ProShop connection: <i class="bi bi-check2-circle"></i> (user id: {{this.conns.getUserId()}})
+    </div>
+    <div *ngIf="!this.conns.getConnected()" style="color: red;">
+      ProShop connection: <i class="bi bi-x-lg"></i>
+    </div>
+    <div *ngIf="this.conns.getPermissions().workorders" style="color: green;">Work order read permissions: <i class="bi bi-check2"></i></div>
+    <div *ngIf="this.conns.getPermissions().parts" style="color: green;">Parts read permissions: <i class="bi bi-check2"></i></div>
+    <div *ngIf="this.conns.getPermissions().sensitive" style="color: green;">Sensitive data read permissions: <i class="bi bi-check2"></i></div>
+    <div *ngIf="!this.conns.getPermissions().workorders" style="color: red;">Work order read permissions: <i class="bi bi-x-lg"></i></div>
+    <div *ngIf="!this.conns.getPermissions().parts" style="color: red;">Parts read permissions: <i class="bi bi-x-lg"></i></div>
+    <div *ngIf="!this.conns.getPermissions().sensitive" style="color: red;">Sensitive data read permissions: <i class="bi bi-x-lg"></i></div>
+  </div>
+</div>

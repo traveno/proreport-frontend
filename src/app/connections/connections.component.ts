@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ConnectionsService } from '../connections.service';
 
 @Component({
   selector: 'app-connections',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ConnectionsComponent implements OnInit {
 
-  constructor() { }
+  constructor(public conns: ConnectionsService) { }
 
   ngOnInit(): void {
   }
