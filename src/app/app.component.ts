@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
-import 'cheerio';
-import { Cheerio, load } from 'cheerio';
 import { from } from 'rxjs';
+import $ from 'cash-dom';
+import { DatabaseService } from './database.service';
 
 @Component({
   selector: 'app-root',
@@ -13,9 +13,7 @@ export class AppComponent {
 
   title = 'shop-meister';
 
-  constructor() {
-    const $ = load('<h2 class="title">Hello world</h2>');
-    //test();
+  constructor(private db: DatabaseService) {
   }
 
   dismissAlert() {
@@ -27,7 +25,6 @@ export class AppComponent {
 async function test(): Promise<void> {
   const response = from(fetch('https://machinesciences.adionsystems.com').then(res => res.text()));
   response.subscribe(result => {
-    const $ = load(result);
     console.log($('span.user_name'));
   });
 }
