@@ -1,59 +1,63 @@
-<div class="row">
-  <h3 class="text-center">Fetching Controls</h3>
-  <div class="col">
-    <form>
-      <fieldset class="fetching-controls">
-        <legend>Where</legend>
-        <input class="form-check-input" type="checkbox" id="fetch-external" checked>
-        <label class="form-check-label" for="fetch-external">Search ProShop</label><br>
-        <input class="form-check-input" type="checkbox" id="fetch-internal" checked>
-        <label class="form-check-label" for="fetch-internal">Search Cache</label>
-      </fieldset>
-    </form>
-  </div>
-  <div class="col">
-    <form>
-      <fieldset class="fetching-controls">
-        <legend>Status</legend>
-        <input class="form-check-input" type="checkbox" id="fetch-active" checked>
-        <label class="form-check-label" for="fetch-active">Active</label><br>
-        <input class="form-check-input" type="checkbox" id="fetch-mfgcomplete" checked>
-        <label class="form-check-label" for="fetch-mfgcomplete">Mfg. Complete</label><br>
-        <input class="form-check-input" type="checkbox" id="fetch-shipped" checked>
-        <label class="form-check-label" for="fetch-shipped">Shipped</label><br>
-        <input class="form-check-input" type="checkbox" id="fetch-onhold" checked>
-        <label class="form-check-label" for="fetch-onhold">On Hold</label><br>
-        <input class="form-check-input" type="checkbox" id="fetch-canceled">
-        <label class="form-check-label" for="fetch-canceled">Canceled</label><br>
-        <input class="form-check-input" type="checkbox" id="fetch-complete">
-        <label class="form-check-label" for="fetch-complete">Complete</label><br>
-        <input class="form-check-input" type="checkbox" id="fetch-invoiced">
-        <label class="form-check-label" for="fetch-invoiced">Invoiced</label>
-      </fieldset>
-    </form>
-  </div>
-  <div class="col">
-    <form>
-      <fieldset class="fetching-controls">
-        <legend>Dept.</legend>
-        <input class="form-check-input" type="checkbox" id="fetch-haas" checked>
-        <label class="form-check-label" for="fetch-haas">Haas</label><br>
-        <input class="form-check-input" type="checkbox" id="fetch-dmu" checked>
-        <label class="form-check-label" for="fetch-dmu">DMU</label><br>
-        <input class="form-check-input" type="checkbox" id="fetch-matsuura" checked>
-        <label class="form-check-label" for="fetch-matsuura">Matsuura</label><br>
-        <input class="form-check-input" type="checkbox" id="fetch-makino" checked>
-        <label class="form-check-label" for="fetch-makino">Makino</label><br>
-        <input class="form-check-input" type="checkbox" id="fetch-lathe" checked>
-        <label class="form-check-label" for="fetch-lathe">Lathe</label><br>
-      </fieldset>
-    </form>
-  </div>
-</div>
-<hr>
-<div class="row my-4">
-  <div class="col">
-    <button id="fetch-updates" type="button" class="btn btn-primary">Fetch Updates</button>
-    <button id="generate-tables" type="button" class="btn btn-primary">Populate Tables</button>
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <h3 class="text-center">Fetching Controls</h3>
+      <div class="col">
+        <form>
+          <fieldset class="fetching-controls">
+            <legend>Where</legend>
+            <input class="form-check-input" type="checkbox" id="fetch-external" checked>
+            <label class="form-check-label" for="fetch-external">Search ProShop</label><br>
+            <input class="form-check-input" type="checkbox" id="fetch-internal" checked>
+            <label class="form-check-label" for="fetch-internal">Search Cache</label>
+          </fieldset>
+        </form>
+      </div>
+      <div class="col">
+        <form>
+          <fieldset class="fetching-controls">
+            <legend>Status</legend>
+            <input class="form-check-input" type="checkbox" id="fetch-active" checked>
+            <label class="form-check-label" for="fetch-active">Active</label><br>
+            <input class="form-check-input" type="checkbox" id="fetch-mfgcomplete" checked>
+            <label class="form-check-label" for="fetch-mfgcomplete">Mfg. Complete</label><br>
+            <input class="form-check-input" type="checkbox" id="fetch-shipped" checked>
+            <label class="form-check-label" for="fetch-shipped">Shipped</label><br>
+            <input class="form-check-input" type="checkbox" id="fetch-onhold" checked>
+            <label class="form-check-label" for="fetch-onhold">On Hold</label><br>
+            <input class="form-check-input" type="checkbox" id="fetch-canceled">
+            <label class="form-check-label" for="fetch-canceled">Canceled</label><br>
+            <input class="form-check-input" type="checkbox" id="fetch-complete">
+            <label class="form-check-label" for="fetch-complete">Complete</label><br>
+            <input class="form-check-input" type="checkbox" id="fetch-invoiced">
+            <label class="form-check-label" for="fetch-invoiced">Invoiced</label>
+          </fieldset>
+        </form>
+      </div>
+      <div class="col">
+        <form>
+          <fieldset class="fetching-controls">
+            <legend>Dept.</legend>
+            <input class="form-check-input" type="checkbox" id="fetch-haas" checked>
+            <label class="form-check-label" for="fetch-haas">Haas</label><br>
+            <input class="form-check-input" type="checkbox" id="fetch-dmu" checked>
+            <label class="form-check-label" for="fetch-dmu">DMU</label><br>
+            <input class="form-check-input" type="checkbox" id="fetch-matsuura" checked>
+            <label class="form-check-label" for="fetch-matsuura">Matsuura</label><br>
+            <input class="form-check-input" type="checkbox" id="fetch-makino" checked>
+            <label class="form-check-label" for="fetch-makino">Makino</label><br>
+            <input class="form-check-input" type="checkbox" id="fetch-lathe" checked>
+            <label class="form-check-label" for="fetch-lathe">Lathe</label><br>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+    <hr>
+    <div class="row my-4">
+      <div class="col">
+        <button id="fetch-updates" type="button" class="btn btn-primary">Fetch Updates</button>
+        <button id="generate-tables" type="button" class="btn btn-primary">Populate Tables</button>
+      </div>
+    </div>
   </div>
 </div>
