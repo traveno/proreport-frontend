@@ -10,6 +10,8 @@ import { FetchControlsComponent } from './fetch-controls/fetch-controls.componen
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { ActivityOverviewComponent } from './activity-overview/activity-overview.component';
 import { StatusLogComponent } from './status-log/status-log.component';
+import { AboutComponent } from './about/about.component';
+import { ConnectionsComponent } from './connections/connections.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { StatusLogComponent } from './status-log/status-log.component';
     FetchControlsComponent,
     SidebarComponent,
     ActivityOverviewComponent,
-    StatusLogComponent
+    StatusLogComponent,
+    AboutComponent,
+    ConnectionsComponent
   ],
   imports: [
     BrowserModule,
