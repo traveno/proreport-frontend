@@ -4,41 +4,58 @@
   </div>
   <div class="card-body">
     <div class="row">
-      <div class="btn-group" [formGroup]="departments" role="group">
-        <input type="checkbox" formControlName="haas" id="haas" class="btn-check" autocomplete="off">
-        <label class="btn btn-secondary" for="haas">HAAS</label>
-        <input type="checkbox" formControlName="dmu" id="dmu" class="btn-check" autocomplete="off">
-        <label class="btn btn-secondary" for="dmu">DMU</label>
-        <input type="checkbox" formControlName="mam" id="mam" class="btn-check" autocomplete="off">
-        <label class="btn btn-secondary" for="mam">MAM</label>
-        <input type="checkbox" formControlName="mak" id="mak" class="btn-check" autocomplete="off">
-        <label class="btn btn-secondary" for="mak">MAK</label>
-        <input type="checkbox" formControlName="lathe" id="lathe" class="btn-check" autocomplete="off">
-        <label class="btn btn-secondary" for="lathe">LATHE</label>
+      <div class="col">
+        <div class="card">
+          <div class="card-header">Department</div>
+          <div class="card-body">
+            <div class="" [formGroup]="departments" role="group">
+              <div class="form-check"><input type="checkbox" formControlName="haas" id="haas" class="form-check-input" autocomplete="off">
+                <label class="form-check-label" for="haas">HAAS</label></div>
+              <div class="form-check"><input type="checkbox" formControlName="dmu" id="dmu" class="form-check-input" autocomplete="off">
+                <label class="form-check-label" for="dmu">DMU</label></div>
+              <div class="form-check"><input type="checkbox" formControlName="mam" id="mam" class="form-check-input" autocomplete="off">
+                <label class="form-check-label" for="mam">MAM</label></div>
+              <div class="form-check"><input type="checkbox" formControlName="mak" id="mak" class="form-check-input" autocomplete="off">
+                <label class="form-check-label" for="mak">MAK</label></div>
+              <div class="form-check"><input type="checkbox" formControlName="lathe" id="lathe" class="form-check-input" autocomplete="off">
+                <label class="form-check-label" for="lathe">LATHE</label></div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="row mt-3">
-      <div class="btn-group" [formGroup]="statuses" role="group">
-        <input type="checkbox" formControlName="active" id="active" class="btn-check" autocomplete="off">
-        <label class="btn btn-secondary" for="active">Active</label>
-        <input type="checkbox" formControlName="mfgcomplete" id="mfgcomplete" class="btn-check" autocomplete="off">
-        <label class="btn btn-secondary" for="mfgcomplete">Mfg. Complete</label>
-        <input type="checkbox" formControlName="shipped" id="shipped" class="btn-check" autocomplete="off">
-        <label class="btn btn-secondary" for="shipped">Shipped</label>
-        <input type="checkbox" formControlName="onhold" id="onhold" class="btn-check" autocomplete="off">
-        <label class="btn btn-secondary" for="onhold">On Hold</label>
-        <input type="checkbox" formControlName="canceled" id="canceled" class="btn-check" autocomplete="off">
-        <label class="btn btn-secondary" for="canceled">Canceled</label>
-        <input type="checkbox" formControlName="invoiced" id="invoiced" class="btn-check" autocomplete="off">
-        <label class="btn btn-secondary" for="invoiced">Invoiced</label>
+      <div class="col">
+        <div class="card">
+          <div class="card-header">Status</div>
+          <div class="card-body">
+            <div class="" [formGroup]="statuses" role="group">
+              <div class="form-check"><input type="checkbox" formControlName="active" id="active" class="form-check-input" autocomplete="off">
+                <label class="form-check-label" for="active">Active</label></div>
+              <div class="form-check"><input type="checkbox" formControlName="mfgcomplete" id="mfgcomplete" class="form-check-input" autocomplete="off">
+                <label class="form-check-label" for="mfgcomplete">Mfg. Complete</label></div>
+              <div class="form-check"><input type="checkbox" formControlName="shipped" id="shipped" class="form-check-input" autocomplete="off">
+                <label class="form-check-label" for="shipped">Shipped</label></div>
+              <div class="form-check"><input type="checkbox" formControlName="onhold" id="onhold" class="form-check-input" autocomplete="off">
+                <label class="form-check-label" for="onhold">On Hold</label></div>
+              <div class="form-check"><input type="checkbox" formControlName="canceled" id="canceled" class="form-check-input" autocomplete="off">
+                <label class="form-check-label" for="canceled">Canceled</label></div>
+              <div class="form-check"><input type="checkbox" formControlName="invoiced" id="invoiced" class="form-check-input" autocomplete="off">
+                <label class="form-check-label" for="invoiced">Invoiced</label></div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="row mt-3">
-      <div class="btn-group" [formGroup]="locations" role="group">
-        <input type="checkbox" formControlName="proshop" id="proshop" class="btn-check" autocomplete="off">
-        <label class="btn btn-secondary" for="proshop">ProShop</label>
-        <input type="checkbox" formControlName="database" id="database" class="btn-check" autocomplete="off">
-        <label class="btn btn-secondary" for="database">Internal Database</label>
+      <div class="col">
+        <div class="card">
+          <div class="card-header">Look at</div>
+          <div class="card-body">
+            <div class="" [formGroup]="locations" role="group">
+              <div class="form-check"><input type="checkbox" formControlName="proshop" id="proshop" class="form-check-input" autocomplete="off">
+              <label class="form-check-label" for="proshop">ProShop</label></div>
+              <div class="form-check"><input type="checkbox" formControlName="database" id="database" class="form-check-input" autocomplete="off">
+              <label class="form-check-label" for="database">Internal Database</label></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
