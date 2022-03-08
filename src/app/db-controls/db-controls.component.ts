@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbCalendar, NgbDate, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -20,6 +20,9 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ModalNewDb {
   constructor(public modal: NgbActiveModal) {}
+
+  close() {
+  }
 }
 
 @Component({
@@ -35,8 +38,9 @@ export class DbControlsComponent implements OnInit {
   }
 
   openModal() {
-    const modalRef = this.modalService.open(ModalNewDb);
-    modalRef.componentInstance.name = 'World';
+    const modalRef = this.modalService.open(ModalNewDb, {  });
   }
 
+  newDatabase() {
+  }
 }

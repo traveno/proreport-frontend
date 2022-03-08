@@ -1,0 +1,10 @@
+.card-body {
+    padding: 1rem;
+}
+
+textarea {
+    font-family:'Courier New', Courier, monospace;
+    background-color: #333 !important;
+    color: #4F3;
+    resize: none;
+}

@@ -1,0 +1,19 @@
+.navbar-brand {
+    padding-top: 100px;
+    padding-left: 20px;
+}
+
+.side-nav-bar {
+    background: rgb(255,255,255);
+    width: 10rem;
+    min-height: 100%;
+}
+
+a {
+    border-radius: 0 !important;
+    padding: 20px 15px 20px 10px;
+}
+
+.nav-link.active {
+    color: #FFF;
+}

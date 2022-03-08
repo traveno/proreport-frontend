@@ -1,63 +1,48 @@
-<div class="card">
+<div class="card shadow">
+  <div class="card-header">
+    Fetching
+  </div>
   <div class="card-body">
     <div class="row">
-      <h3 class="text-center">Fetching Controls</h3>
-      <div class="col">
-        <form>
-          <fieldset class="fetching-controls">
-            <legend>Where</legend>
-            <input class="form-check-input" type="checkbox" id="fetch-external" checked>
-            <label class="form-check-label" for="fetch-external">Search ProShop</label><br>
-            <input class="form-check-input" type="checkbox" id="fetch-internal" checked>
-            <label class="form-check-label" for="fetch-internal">Search Cache</label>
-          </fieldset>
-        </form>
-      </div>
-      <div class="col">
-        <form>
-          <fieldset class="fetching-controls">
-            <legend>Status</legend>
-            <input class="form-check-input" type="checkbox" id="fetch-active" checked>
-            <label class="form-check-label" for="fetch-active">Active</label><br>
-            <input class="form-check-input" type="checkbox" id="fetch-mfgcomplete" checked>
-            <label class="form-check-label" for="fetch-mfgcomplete">Mfg. Complete</label><br>
-            <input class="form-check-input" type="checkbox" id="fetch-shipped" checked>
-            <label class="form-check-label" for="fetch-shipped">Shipped</label><br>
-            <input class="form-check-input" type="checkbox" id="fetch-onhold" checked>
-            <label class="form-check-label" for="fetch-onhold">On Hold</label><br>
-            <input class="form-check-input" type="checkbox" id="fetch-canceled">
-            <label class="form-check-label" for="fetch-canceled">Canceled</label><br>
-            <input class="form-check-input" type="checkbox" id="fetch-complete">
-            <label class="form-check-label" for="fetch-complete">Complete</label><br>
-            <input class="form-check-input" type="checkbox" id="fetch-invoiced">
-            <label class="form-check-label" for="fetch-invoiced">Invoiced</label>
-          </fieldset>
-        </form>
-      </div>
-      <div class="col">
-        <form>
-          <fieldset class="fetching-controls">
-            <legend>Dept.</legend>
-            <input class="form-check-input" type="checkbox" id="fetch-haas" checked>
-            <label class="form-check-label" for="fetch-haas">Haas</label><br>
-            <input class="form-check-input" type="checkbox" id="fetch-dmu" checked>
-            <label class="form-check-label" for="fetch-dmu">DMU</label><br>
-            <input class="form-check-input" type="checkbox" id="fetch-matsuura" checked>
-            <label class="form-check-label" for="fetch-matsuura">Matsuura</label><br>
-            <input class="form-check-input" type="checkbox" id="fetch-makino" checked>
-            <label class="form-check-label" for="fetch-makino">Makino</label><br>
-            <input class="form-check-input" type="checkbox" id="fetch-lathe" checked>
-            <label class="form-check-label" for="fetch-lathe">Lathe</label><br>
-          </fieldset>
-        </form>
+      <div class="btn-group" [formGroup]="departments" role="group">
+        <input type="checkbox" formControlName="haas" id="haas" class="btn-check" autocomplete="off">
+        <label class="btn btn-secondary" for="haas">HAAS</label>
+        <input type="checkbox" formControlName="dmu" id="dmu" class="btn-check" autocomplete="off">
+        <label class="btn btn-secondary" for="dmu">DMU</label>
+        <input type="checkbox" formControlName="mam" id="mam" class="btn-check" autocomplete="off">
+        <label class="btn btn-secondary" for="mam">MAM</label>
+        <input type="checkbox" formControlName="mak" id="mak" class="btn-check" autocomplete="off">
+        <label class="btn btn-secondary" for="mak">MAK</label>
+        <input type="checkbox" formControlName="lathe" id="lathe" class="btn-check" autocomplete="off">
+        <label class="btn btn-secondary" for="lathe">LATHE</label>
       </div>
     </div>
-    <hr>
-    <div class="row my-4">
-      <div class="col">
-        <button id="fetch-updates" type="button" class="btn btn-primary">Fetch Updates</button>
-        <button id="generate-tables" type="button" class="btn btn-primary">Populate Tables</button>
+    <div class="row mt-3">
+      <div class="btn-group" [formGroup]="statuses" role="group">
+        <input type="checkbox" formControlName="active" id="active" class="btn-check" autocomplete="off">
+        <label class="btn btn-secondary" for="active">Active</label>
+        <input type="checkbox" formControlName="mfgcomplete" id="mfgcomplete" class="btn-check" autocomplete="off">
+        <label class="btn btn-secondary" for="mfgcomplete">Mfg. Complete</label>
+        <input type="checkbox" formControlName="shipped" id="shipped" class="btn-check" autocomplete="off">
+        <label class="btn btn-secondary" for="shipped">Shipped</label>
+        <input type="checkbox" formControlName="onhold" id="onhold" class="btn-check" autocomplete="off">
+        <label class="btn btn-secondary" for="onhold">On Hold</label>
+        <input type="checkbox" formControlName="canceled" id="canceled" class="btn-check" autocomplete="off">
+        <label class="btn btn-secondary" for="canceled">Canceled</label>
+        <input type="checkbox" formControlName="invoiced" id="invoiced" class="btn-check" autocomplete="off">
+        <label class="btn btn-secondary" for="invoiced">Invoiced</label>
       </div>
     </div>
+    <div class="row mt-3">
+      <div class="btn-group" [formGroup]="locations" role="group">
+        <input type="checkbox" formControlName="proshop" id="proshop" class="btn-check" autocomplete="off">
+        <label class="btn btn-secondary" for="proshop">ProShop</label>
+        <input type="checkbox" formControlName="database" id="database" class="btn-check" autocomplete="off">
+        <label class="btn btn-secondary" for="database">Internal Database</label>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <button type="button" class="btn btn-lg btn-primary" placement="right" ngbTooltip="Pull data and crunch numbers" (click)="submit()">Generate Report</button>
   </div>
 </div>

@@ -1,0 +1,17 @@
+<div class="side-nav-bar shadow-lg">
+  <div class="navbar-brand">Shop Meister</div>
+  <hr>
+  <ul ngbNav #nav="ngbNav" class="nav-pills" orientation="vertical">
+    <li ngbNavItem="top">
+      <a ngbNavLink>Dashboard</a>
+    </li>
+    <li ngbNavItem="middle">
+      <a ngbNavLink>Reporting</a>
+    </li>
+    <li ngbNavItem="bottom">
+      <a ngbNavLink>Work Flow</a>
+    </li>
+  </ul>
+
+  <div [ngbNavOutlet]="nav" class="ms-4"></div>
+</div>

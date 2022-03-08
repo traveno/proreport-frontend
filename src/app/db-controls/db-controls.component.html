@@ -1,17 +1,15 @@
-<div class="card">
+<div class="card shadow">
+  <div class="card-header">
+    Database
+  </div>
   <div class="card-body">
-    <div class="row">
-      <h3 class="text-center">Cache Controls</h3>
-    </div>
     <div class="row mb-4 align-items-center">
       <div class="col">
         <input type="file" id="cache-input" name="Load cache file">
         <div class="btn-group" role="group">
           <label for="cache-input" class="btn btn-primary" placement="top" ngbTooltip="Import a cache file">Load</label>
           <button id="cache-save" type="button" class="btn btn-primary">Save</button>
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#new-cache-modal"
-            (click)="openModal()">Build
-            new</button>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#new-cache-modal" (click)="openModal()">New</button>
         </div>
       </div>
       <div class="col">

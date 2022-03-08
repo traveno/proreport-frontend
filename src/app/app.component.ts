@@ -9,12 +9,17 @@ import { from } from 'rxjs';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  databaseLoaded = false;
 
   title = 'shop-meister';
 
   constructor() {
     const $ = load('<h2 class="title">Hello world</h2>');
-    test();
+    //test();
+  }
+
+  dismissAlert() {
+    this.databaseLoaded = true;
   }
   
 }
