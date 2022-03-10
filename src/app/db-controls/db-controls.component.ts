@@ -1,5 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal, NgbCalendar, NgbDate, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DatabaseService } from '../database.service';
+import { PS_Database_Status } from '../proshop/Database';
 
 
 @Component({
@@ -13,8 +15,8 @@ import { NgbActiveModal, NgbCalendar, NgbDate, NgbModal } from '@ng-bootstrap/ng
       <p>Creating a new database will take some time. Like, a lot of time.</p>
   </div>
   <div class="modal-footer">
-      <button type="button" class="btn" (click)="modal.close()">Nevermind</button>
-      <button type="button" class="btn btn-danger" (click)="modal.close()">I'm sure</button>
+      <button type="button" class="btn" (click)="modal.close(false)">Nevermind</button>
+      <button type="button" class="btn btn-danger" (click)="modal.close(true)">I'm sure</button>
   </div>
   `
 })
@@ -31,16 +33,42 @@ export class ModalNewDb {
   styleUrls: ['./db-controls.component.css']
 })
 export class DbControlsComponent implements OnInit {
+  status: PS_Database_Status | undefined;
+  entries: number | undefined;
+  timestamp: string | undefined;
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal, public dbService: DatabaseService) { }
 
   ngOnInit(): void {
+    this.dbService.dbStatusEmitter.subscribe(data => {
+      this.status = data.status;
+      this.entries = data.entries;
+      this.timestamp = getSimpleDate(data.timestamp);
+    });
+  }
+
+  loadDatabaseFromFile(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const files = target.files;
+
+    if (files)
+      this.dbService.loadDatabase(files[0]);
   }
 
   openModal() {
-    const modalRef = this.modalService.open(ModalNewDb, {  });
+    const modalRef = this.modalService.open(ModalNewDb);
+    modalRef.closed.subscribe((accept) => { if (accept) this.dbService.newDatabase(); });
   }
+}
 
-  newDatabase() {
-  }
+function getSimpleDate(time: Date): string {
+  let temp: string = "";
+
+  temp += (time.getMonth() + 1) + "/";
+  temp +=  time.getDate()       + "/";
+  temp +=  time.getFullYear()   + " ";
+  temp +=  time.getHours()      + ":";
+  temp +=  time.getMinutes();
+
+  return temp;
 }

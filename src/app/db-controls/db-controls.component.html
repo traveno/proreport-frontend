@@ -5,7 +5,7 @@
   <div class="card-body">
     <div class="row align-items-center">
       <div class="col text-center">
-        <input type="file" id="cache-input" name="Load cache file">
+        <input type="file" id="cache-input" name="Load cache file" (change)="loadDatabaseFromFile($event)">
         <div class="btn-group" role="group">
           <label for="cache-input" class="btn btn-lg btn-primary" placement="top" ngbTooltip="Import a database file">Load</label>
           <button id="cache-save" type="button" class="btn btn-lg btn-primary" placement="top" ngbTooltip="Save database">Save</button>
@@ -14,20 +14,20 @@
       </div>
       <div class="col">
         <div class="card db-stats">
-          <div class="card-body">
+          <div class="card-body text-center">
             <table>
               <tbody>
                 <tr>
                   <th scope="row" class="text-end">Status:</th>
-                  <td class="text-start"><span id="cache-status"></span></td>
+                  <td class="text-start">{{status}}</td>
                 </tr>
                 <tr>
                   <th scope="row" class="text-end">Entries:</th>
-                  <td class="text-start"><span id="cache-entries"></span></td>
+                  <td class="text-start">{{entries}}</td>
                 </tr>
                 <tr>
                   <th scope="row" class="text-end">Timestamp:</th>
-                  <td class="text-start"><span id="cache-timestamp"></span></td>
+                  <td class="text-start">{{timestamp}}</td>
                 </tr>
               </tbody>
             </table>

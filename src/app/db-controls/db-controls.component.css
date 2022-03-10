@@ -12,3 +12,7 @@
 .db-stats {
     background-color: rgba(0,0,0,.03)
 }
+
+td {
+    padding-left: 10px;
+}
