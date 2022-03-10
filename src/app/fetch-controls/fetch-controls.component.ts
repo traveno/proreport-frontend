@@ -47,6 +47,13 @@ export class FetchControlsComponent implements OnInit {
       fetchInternal: this.locations.getRawValue().database
     }
 
+    let deptValues = this.departments.getRawValue();
+
+    if (deptValues.haas) {
+      options.queries.push();
+      options.machines.push()
+    }
+
     console.log(options);
   }
 }
