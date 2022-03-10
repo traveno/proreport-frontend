@@ -18,6 +18,9 @@
               </tr>
             </thead>
             <tbody>
+              <tr *ngFor="let d of getMachineActivity(m)">
+                <td>{{d.name}}</td><td>{{d.active}}</td><td>{{d.mfgcomplete}}</td><td>{{d.shipped}}</td><td>{{d.invoiced}}</td>
+              </tr>
             </tbody>
           </table>
         </ng-template>
