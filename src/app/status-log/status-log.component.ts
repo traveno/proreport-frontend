@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { DatabaseService } from '../database.service';
 
 import { StatusLogService } from '../status-log.service';
 
@@ -9,14 +10,10 @@ import { StatusLogService } from '../status-log.service';
   styleUrls: ['./status-log.component.css']
 })
 export class StatusLogComponent implements OnInit, AfterViewInit, OnDestroy {
-  loggerSub: Subscription;
-  logs: string[] = [];
-
   text: string[] = [];
   @ViewChild('logBox') logElementRef!: ElementRef;
 
-  constructor(private logger: StatusLogService) {
-    this.loggerSub = this.logger.getMessage().subscribe(this.appendLog);
+  constructor(private dbService: DatabaseService) {
   }
 
   ngOnInit(): void {
@@ -24,15 +21,25 @@ export class StatusLogComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    console.log(this.logElementRef);
-    
+    this.dbService.getLogEmitter().subscribe((log) => {
+      this.text.push(log);
+      this.redrawLog();
+    });
   }
 
-  appendLog(message: string) {
-    this.logs.push(message);
+  redrawLog() {
+    this.logElementRef.nativeElement.innerHTML = '';
+    for (let t of this.text)
+      if (this.text.indexOf(t) === 0)
+        this.logElementRef.nativeElement.innerHTML = t;
+      else
+        this.logElementRef.nativeElement.innerHTML = `${this.logElementRef.nativeElement.innerHTML}\n${t}`;
+
+
+    this.logElementRef.nativeElement.scrollTop = this.logElementRef.nativeElement.scrollHeight;
   }
 
   ngOnDestroy(): void {
-    this.loggerSub.unsubscribe();
+    this.dbService.getLogEmitter().unsubscribe();
   }
 }
