@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { DatabaseService } from '../database.service';
+import { PS_Update_Options } from '../proshop/ProData';
 
 @Component({
   selector: 'app-fetch-controls',
@@ -16,7 +18,7 @@ export class FetchControlsComponent implements OnInit {
 
   });
   statuses = new FormGroup({
-    active: new FormControl(true),
+    active: new FormControl(false),
     mfgcomplete: new FormControl(true),
     shipped: new FormControl(true),
     onhold: new FormControl(true),
@@ -30,11 +32,21 @@ export class FetchControlsComponent implements OnInit {
   });
 
 
-  constructor() { }
+  constructor(public dbService: DatabaseService) { }
 
   ngOnInit(): void {
+    console.log(this.statuses.getRawValue());
   }
 
   submit() {
+    let options: PS_Update_Options = {
+      statuses: new Array(),
+      queries: new Array(),
+      machines: new Array(),
+      fetchExternal: this.locations.getRawValue().proshop,
+      fetchInternal: this.locations.getRawValue().database
+    }
+
+    console.log(options);
   }
 }
