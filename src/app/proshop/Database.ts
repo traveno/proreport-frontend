@@ -1,4 +1,4 @@
-import { PS_WorkOrder, PS_WorkOrder_OpRows, PS_WorkOrder_OpRow, PS_WorkOrder_Status } from './WorkOrder';
+import { PS_WorkOrder, PS_WorkOrder_OpRow, PS_WorkOrder_Status } from './WorkOrder';
 import { BASE_URL, PS_Update_Options } from './ProData';
 
 export enum PS_Database_Status { EMPTY = 0, OUTDATED, OK, ERROR, UNSAVED_CHANGES }
@@ -42,17 +42,17 @@ export class PS_Database {
         });
     }
 
-    getStatus(): PS_Cache_Status {
+    getStatus(): PS_Database_Status {
         if (this.timestamp_data === undefined)
-            return PS_Cache_Status.EMPTY;
+            return PS_Database_Status.EMPTY;
         else if (this.timestamp_data.getDate() != new Date().getDate())
-            return PS_Cache_Status.OUTDATED;
+            return PS_Database_Status.OUTDATED;
         else if (this.timestamp_data > this.timestamp_save)
-            return PS_Cache_Status.UNSAVED_CHANGES;
+            return PS_Database_Status.UNSAVED_CHANGES;
         else if (this.timestamp_data.getDate() === new Date().getDate())
-            return PS_Cache_Status.OK
+            return PS_Database_Status.OK
         else
-            return PS_Cache_Status.ERROR;
+            return PS_Database_Status.ERROR;
     }
 
     getMatchingUpdateCriteria(options: PS_Update_Options): string[] {
@@ -86,7 +86,7 @@ export class PS_Database {
         return this.workorders.find(elem => elem.index === index);
     }
 
-    filter(options: PS_Cache_Filter): PS_WorkOrder[] {
+    filter(options: PS_Database_Filter): PS_WorkOrder[] {
         let temp: PS_WorkOrder[] = new Array();
         
         // We begin
@@ -106,7 +106,8 @@ export class PS_Database {
         return temp;
     }
 
-    async fetchWorkOrder(index: string, callback?: any): Promise<void> {
+    async fetchWorkOrder(index: string | undefined, callback?: any): Promise<void> {
+        if (index === undefined) return;
         // If this already exists in our cache, fetch new data
         let duplicateFinder = this.workorders.find(elem => elem.index === index);
         if (duplicateFinder !== undefined) {
@@ -141,7 +142,7 @@ export class PS_Database {
     }
 }
 
-function handleFetchErrors(response) {
+function handleFetchErrors(response: any) {
     if (!response.ok)
         throw Error(response.statusText);
     return response;

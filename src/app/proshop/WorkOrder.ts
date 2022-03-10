@@ -1,8 +1,8 @@
+import $, { Cash } from 'cash-dom';
 import { BASE_URL, PS_Update_Options } from "./ProData";
 
 export enum PS_WorkOrder_Status { ACTIVE = 0, CANCELED, COMPLETE, INVOICED, MANUFACTURING_COMPLETE, ON_HOLD, SHIPPED, UNKNOWN }
 
-export interface PS_WorkOrder_OpRows extends Array<PS_WorkOrder_OpRow>{};
 export interface PS_WorkOrder_OpRow {
     op: string,
     opDesc: string,
@@ -18,11 +18,11 @@ export interface PS_WorkOrder_TrackingRow {
 export class PS_WorkOrder {
     index: string;
     status: PS_WorkOrder_Status = PS_WorkOrder_Status.UNKNOWN;
-    routingTable: PS_WorkOrder_OpRows;
+    routingTable: PS_WorkOrder_OpRow[];
 
-    constructor(index: string, status?: PS_WorkOrder_Status, routingTable?: PS_WorkOrder_OpRows) {
+    constructor(index: string, status?: PS_WorkOrder_Status, routingTable?: PS_WorkOrder_OpRow[]) {
         this.index = index;
-        this.routingTable = new Array();
+        this.routingTable = [];
 
         if (status !== undefined)
             this.status = status;
@@ -46,7 +46,7 @@ export class PS_WorkOrder {
                 let doc: Document = parser.parseFromString(html, "text/html");
     
                 let status: string = $(doc).find("#horizontalMainAtts_status_value").text();
-                let routingTable: JQuery<HTMLElement> = $(doc).find("table.proshop-table").eq(5);
+                let routingTable: any = $(doc).find("table.proshop-table").eq(5);
     
                 this.setStatusFromString(status);
                 this.parseRoutingTable(routingTable);
@@ -58,20 +58,20 @@ export class PS_WorkOrder {
         });
     }
 
-    parseRoutingTable(table: JQuery<HTMLElement>): void {
-        let tableRows: JQuery<HTMLElement> = $(table).find("tbody tr");
-        let result: PS_WorkOrder_OpRows = new Array();
+    parseRoutingTable(table: any): void {
+        let tableRows: any = $(table).find("tbody tr");
+        let result: PS_WorkOrder_OpRow[] = [];
     
         $(tableRows).each(function() {
             let rowOp: string = $(this).find("td:first-of-type > a").text();
             let rowDesc: string = $(this).find("td:nth-of-type(2)").text();
             let rowResource: string = $(this).find("td:nth-of-type(3)").text()
             let rowComplete: boolean = $(this).find("td:nth-of-type(10) span").hasClass("glyphicon-ok");
-            let rowCompleteDate: Date = undefined;
+
+            let rowCompleteDate: Date | undefined = undefined;
+            let temp: string | null = $(this).find("td:nth-of-type(10) span").attr("title");
     
-            if (rowComplete) {
-                let temp: string = $(this).find("td:nth-of-type(10) span").attr("title");
-    
+            if (rowComplete && temp !== null) {
                 let month: number = parseInt(temp.split("/")[0].slice(-2));
                 let day: number = parseInt(temp.split("/")[1]);
                 let year: number = parseInt(temp.split("/")[2].slice(0, 4));
@@ -116,7 +116,7 @@ export class PS_WorkOrder {
     }
 
     // Return first op row that matches op code
-    getRoutingTableRow(opCode: string): PS_WorkOrder_OpRow {
+    getRoutingTableRow(opCode: string): PS_WorkOrder_OpRow | undefined {
         return this.routingTable.find(elem => elem.op === opCode);
     }
 

@@ -1,5 +1,5 @@
 class PS_Part {
-    private index: string;
+    private index: string = '';
 
     constructor(copy?: PS_Part) {
         if (copy !== undefined) {

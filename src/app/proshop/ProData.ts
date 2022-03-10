@@ -1,4 +1,6 @@
-import { PS_Cache, PS_Cache_Filter, PS_Cache_Status } from "./Database"
+import $ from 'cash-dom';
+
+import { PS_Database, PS_Database_Filter, PS_Database_Status } from "./Database"
 import { PS_WorkOrder, PS_WorkOrder_Status } from './WorkOrder';
 
 // Interfaces
@@ -23,22 +25,22 @@ export interface PS_Update_Options {
 
 // Constants
 const MAX_CONCURRENT_REQUESTS: number = 3;
-export var BASE_URL: string;
+export var BASE_URL: string = 'https://machinesciences.adionsystems.com';
 
 // Global vars
-var cache: PS_Cache;
+var cache: PS_Database;
 var cache_updateList: string[] = new Array();
 var cache_updateIndex: number = 0;
 var cache_updateTotal: number = 0;
 var statusUpdateCallback: any = undefined;
 
-export function newCache(options: PS_Update_Options): void {
-    cache = new PS_Cache();
+export function newDatabase(options: PS_Update_Options): void {
+    cache = new PS_Database();
     buildUpdateList(options);
 }
 
-export async function loadCache(file: File): Promise<void> {
-    cache = new PS_Cache();
+export async function loadDatabase(file: File): Promise<void> {
+    cache = new PS_Database();
     await cache.loadFromFile(file);
     signalStatusUpdateCallback({ log: "Imported cache" });
 
@@ -48,7 +50,7 @@ export async function loadCache(file: File): Promise<void> {
         signalStatusUpdateCallback({ log: "ERROR: Cache failed integrity test" });
 }
 
-export function saveCache(): void {
+export function saveDatabase(): void {
     if (!cache) {
         console.log("Cache does not exist");
         return;
@@ -107,13 +109,13 @@ export async function buildUpdateList(options: PS_Update_Options): Promise<void>
     cache.updateDataTimestamp();
 }
 
-export function fetchProShopQuery(query: string, options?: PS_Update_Options): Promise<boolean> {
+export function fetchProShopQuery(query: string, options: PS_Update_Options): Promise<boolean> {
     return new Promise(resolve => {
         fetch(BASE_URL + "/procnc/workorders/searchresults$queryScope=global&queryName=" + query + "&pName=workorders").then(res => res.text()).then(html => {
             let parser: DOMParser = new DOMParser();
             let doc: Document = parser.parseFromString(html, "text/html");
     
-            let woList: JQuery<HTMLElement> = $(doc).find("table.dataTable tbody tr");
+            let woList: any = $(doc).find("table.dataTable tbody tr");
 
             let temp: number = cache_updateList.length;
     
@@ -159,13 +161,9 @@ async function updateCache(): Promise<void> {
     });
 }
 
-export function setBaseURL(url: string) {
-    BASE_URL = url;
-}
-
-export function getCacheStatus(): PS_Cache_Status {
+export function getDatabaseStatus(): PS_Database_Status {
     if (!cache)
-        return PS_Cache_Status.EMPTY;
+        return PS_Database_Status.EMPTY;
     return cache.getStatus();
 }
 
@@ -177,7 +175,7 @@ export function getDataTimestamp(): Date {
     return cache.getDataTimestamp();
 }
 
-export function getMatchingWorkOrders(options: PS_Cache_Filter): PS_WorkOrder[] {
+export function getMatchingWorkOrders(options: PS_Database_Filter): PS_WorkOrder[] {
     // Check if cache is initialized
     if (cache === undefined)
         throw Error("Tried to access uninitialized cache");
