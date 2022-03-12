@@ -1,5 +1,6 @@
 <div class="card shadow">
   <div class="card-header">
+    <i class="bi bi-box"></i>
     Database
   </div>
   <div class="card-body">
@@ -8,7 +9,7 @@
         <input type="file" id="cache-input" name="Load cache file" (change)="loadDatabaseFromFile($event)">
         <div class="btn-group" role="group">
           <label for="cache-input" class="btn btn-lg btn-primary" placement="top" ngbTooltip="Import a database file">Load</label>
-          <button id="cache-save" type="button" class="btn btn-lg btn-primary" placement="top" ngbTooltip="Save database">Save</button>
+          <button id="cache-save" type="button" class="btn btn-lg btn-primary" placement="top" ngbTooltip="Save database" (click)="saveDatabaseToFile()">Save</button>
           <button type="button" class="btn btn-lg btn-primary" placement="top" ngbTooltip="Create a new database" (click)="openModal()">New</button>
         </div>
       </div>
