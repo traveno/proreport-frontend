@@ -13,12 +13,11 @@ export class AppComponent {
 
   title = 'shop-meister';
 
-  constructor(private db: DatabaseService) {
+  constructor(private dbService: DatabaseService) {
   }
 
-  dismissAlert() {
-    this.databaseLoaded = true;
-    
+  isDatabaseLoaded(): boolean {
+    return this.dbService.isInitialized();
   }
   
 }
