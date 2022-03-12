@@ -35,7 +35,8 @@ export class PS_Database {
 
                 // Bring in all work orders from file
                 for (let wo of parse.workorders) {
-                    this.workorders.push(new PS_WorkOrder(wo.index, wo.status, wo.routingTable));
+
+                    this.workorders.push(new PS_WorkOrder(wo));
                 }
                 resolve();
             }
@@ -96,7 +97,7 @@ export class PS_Database {
                 if (wo.status !== options.status) 
                     continue;
                
-            // Filter by machine resource (op60) if defined
+            // Filter by machine resource (all ops) if defined
             if (options.resource !== undefined)
                 if (!wo.containsResource(options.resource))
                     continue;
@@ -110,17 +111,18 @@ export class PS_Database {
         if (index === undefined) return;
         // If this already exists in our cache, fetch new data
         let duplicateFinder = this.workorders.find(elem => elem.index === index);
-        if (duplicateFinder !== undefined) {
-            this.workorders.splice(this.workorders.indexOf(duplicateFinder), 1);
+
+        // If work order exists, fetch new data for existing record
+        if (duplicateFinder)
+            await duplicateFinder.fetch();
+        else {
+            // Create new work order object and push onto stack
+            let wo: PS_WorkOrder = new PS_WorkOrder();
+            await wo.createFromIndex(index);
+            this.workorders.push(wo);
         }
 
-        let wo: PS_WorkOrder = new PS_WorkOrder(index);
-        await wo.fetch();
-
-
-        this.workorders.push(wo);
-        console.log(wo);
-    
+        // ProData callback
         if (callback)
             callback();
     }
