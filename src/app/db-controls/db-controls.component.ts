@@ -13,6 +13,7 @@ import { PS_Database_Status } from '../proshop/Database';
   </div>
   <div class="modal-body">
       <p>Creating a new database will take some time. Like, a lot of time.</p>
+      <p>All work orders of any status from all departments will be fetched.</p>
   </div>
   <div class="modal-footer">
       <button type="button" class="btn" (click)="modal.close(false)">Nevermind</button>
@@ -21,7 +22,7 @@ import { PS_Database_Status } from '../proshop/Database';
   `
 })
 export class ModalNewDb {
-  constructor(public modal: NgbActiveModal) {}
+  constructor(public modal: NgbActiveModal) { }
 
   close() {
   }
@@ -55,6 +56,10 @@ export class DbControlsComponent implements OnInit {
       this.dbService.loadDatabase(files[0]);
   }
 
+  saveDatabaseToFile() {
+    this.dbService.saveDatabase();
+  }
+
   openModal() {
     const modalRef = this.modalService.open(ModalNewDb);
     modalRef.closed.subscribe((accept) => { if (accept) this.dbService.newDatabase(); });
@@ -65,10 +70,10 @@ function getSimpleDate(time: Date): string {
   let temp: string = "";
 
   temp += (time.getMonth() + 1) + "/";
-  temp +=  time.getDate()       + "/";
-  temp +=  time.getFullYear()   + " ";
-  temp +=  time.getHours()      + ":";
-  temp +=  time.getMinutes();
+  temp += time.getDate() + "/";
+  temp += time.getFullYear() + " ";
+  temp += time.getHours() + ":";
+  temp += time.getMinutes();
 
   return temp;
 }
