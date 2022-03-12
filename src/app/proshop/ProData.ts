@@ -42,12 +42,13 @@ export function newDatabase(options: PS_Update_Options): void {
 export async function loadDatabase(file: File): Promise<void> {
     cache = new PS_Database();
     await cache.loadFromFile(file);
-    signalStatusUpdateCallback({ log: "Imported cache" });
+    signalStatusUpdateCallback({ log: "Imported database" });
+    signalStatusUpdateCallback({ log: "Verifying integrity" });
 
     if (cache.verify())
-        signalStatusUpdateCallback({ log: "Cache passed all checks" });
+        signalStatusUpdateCallback({ log: "Database passed all checks" });
     else
-        signalStatusUpdateCallback({ log: "ERROR: Cache failed integrity test" });
+        signalStatusUpdateCallback({ log: "ERROR: Database failed integrity test" });
 }
 
 export function saveDatabase(): void {
@@ -60,7 +61,7 @@ export function saveDatabase(): void {
 
     signalStatusUpdateCallback({ log: "Saving cache" });
 
-    const data = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(cache));
+    const data = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(cache, null, 2));
     const date: Date = new Date();
 
     let download = document.createElement("a");
