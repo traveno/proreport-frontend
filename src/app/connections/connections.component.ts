@@ -8,7 +8,7 @@ import { ConnectionsService } from '../connections.service';
 })
 export class ConnectionsComponent implements OnInit {
 
-  constructor(public conns: ConnectionsService) { }
+  constructor(public connService: ConnectionsService) { }
 
   ngOnInit(): void {
   }
