@@ -16,27 +16,35 @@ export interface PS_WorkOrder_TrackingRow {
 }
 
 export class PS_WorkOrder {
-    index: string;
+    index: string = '00-0000';
     status: PS_WorkOrder_Status = PS_WorkOrder_Status.UNKNOWN;
-    routingTable: PS_WorkOrder_OpRow[];
+    
+    routingTable: PS_WorkOrder_OpRow[] = [];
 
-    constructor(index: string, status?: PS_WorkOrder_Status, routingTable?: PS_WorkOrder_OpRow[]) {
-        this.index = index;
+    constructor(copy?: PS_WorkOrder) {
+        if (!copy) return;
+
+        this.index = copy.index;
+        this.status = copy.status;
         this.routingTable = [];
 
-        if (status !== undefined)
-            this.status = status;
+        for (let row of copy.routingTable) {
+            this.routingTable.push({
+                op: row.op,
+                opDesc: row.opDesc,
+                resource: row.resource,
+                complete: row.complete,
+                completeDate: row.completeDate !== undefined ? new Date(row.completeDate) : undefined
+            });
+        }
+    }
 
-        if (routingTable !== undefined)
-            for (let row of routingTable) {
-                this.routingTable.push({
-                    op: row.op,
-                    opDesc: row.opDesc,
-                    resource: row.resource,
-                    complete: row.complete,
-                    completeDate: row.completeDate !== undefined ? new Date(row.completeDate) : undefined
-                });
-            }
+    createFromIndex(index: string): Promise<void> {
+        return new Promise(resolve => {
+            this.index = index;
+            this.fetch();
+            resolve()
+        });
     }
 
     fetch(): Promise<void> {
@@ -45,13 +53,14 @@ export class PS_WorkOrder {
                 let parser: DOMParser = new DOMParser();
                 let doc: Document = parser.parseFromString(html, "text/html");
     
+                // Set our work order's internal data
                 let status: string = $(doc).find("#horizontalMainAtts_status_value").text();
                 let routingTable: any = $(doc).find("table.proshop-table").eq(5);
     
                 this.setStatusFromString(status);
                 this.parseRoutingTable(routingTable);
 
-                console.log(this);
+                // Done fetching external data for this work order
             }).then(() => {
                 resolve();
             });
