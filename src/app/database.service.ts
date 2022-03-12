@@ -26,10 +26,6 @@ export class DatabaseService {
     return this.logEmitter;
   }
 
-  addActivity() {
-    this.testdata.push(new Date().toDateString());
-  }
-
   getMatchingWordOrders(options: PS_Database_Filter): PS_WorkOrder[] {
     return ProData.getMatchingWorkOrders(options);
   }
@@ -77,5 +73,13 @@ export class DatabaseService {
     options.queries.push("query59");
 
     ProData.newDatabase(options);
+  }
+
+  updateDatabase(options: ProData.PS_Update_Options) {
+    ProData.buildUpdateList(options);
+  }
+
+  saveDatabase(): void {
+    ProData.saveDatabase();
   }
 }
