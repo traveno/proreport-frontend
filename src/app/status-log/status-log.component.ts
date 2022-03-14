@@ -40,6 +40,7 @@ export class StatusLogComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.dbService.getLogEmitter().unsubscribe();
+    // Unsubscribing causes an error on router navigation?
+    // this.dbService.getLogEmitter().unsubscribe();
   }
 }
