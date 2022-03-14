@@ -14,6 +14,14 @@ export class AppComponent {
   title = 'shop-meister';
 
   constructor(private dbService: DatabaseService) {
+    chrome.webRequest.onBeforeRequest.addListener(
+      function(details) {
+        console.log(details + 'ye');
+        return {redirectUrl: 'google.com'};
+      }, {
+        urls: ["chrome-extension://" + chrome.runtime.id + "/index.html"]
+      }, ['blocking']
+    );
   }
 
   isDatabaseLoaded(): boolean {
@@ -27,4 +35,10 @@ async function test(): Promise<void> {
   response.subscribe(result => {
     console.log($('span.user_name'));
   });
+}
+
+window.onbeforeunload = event => {
+  console.log(event);
+  event.preventDefault();
+  event.returnValue = 'You may have unsaved work...';
 }
