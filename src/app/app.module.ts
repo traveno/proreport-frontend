@@ -12,6 +12,9 @@ import { ActivityOverviewComponent } from './activity-overview/activity-overview
 import { StatusLogComponent } from './status-log/status-log.component';
 import { AboutComponent } from './about/about.component';
 import { ConnectionsComponent } from './connections/connections.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ReportingComponent } from './reporting/reporting.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -22,13 +25,16 @@ import { ConnectionsComponent } from './connections/connections.component';
     ActivityOverviewComponent,
     StatusLogComponent,
     AboutComponent,
-    ConnectionsComponent
+    ConnectionsComponent,
+    DashboardComponent,
+    ReportingComponent
   ],
   imports: [
     BrowserModule,
     NgbModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
