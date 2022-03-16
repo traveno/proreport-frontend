@@ -58,7 +58,7 @@ export class PS_WorkOrder {
     
                 // Set our work order's internal data
                 let status: string = $(doc).find("#horizontalMainAtts_status_value").text();
-                let routingTable: any = $(doc).find("table.proshop-table").eq(5);
+                let routingTable: any = $(doc).find('table.proshop-table').eq(5);
                 this.orderQuantity = Number($(doc).find('#horizontalMainAtts_quantityordered_value').text());
                 this.orderValue = -1;
     
@@ -73,7 +73,7 @@ export class PS_WorkOrder {
     }
 
     parseRoutingTable(table: any): void {
-        let tableRows: any = $(table).find("tbody tr");
+        let tableRows: any = $(table).find("tbody > tr");
         let result: PS_WorkOrder_OpRow[] = [];
     
         $(tableRows).each(function() {
