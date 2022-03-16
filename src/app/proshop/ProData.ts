@@ -4,13 +4,6 @@ import { PS_Database, PS_Database_Filter, PS_Database_Status } from "./Database"
 import { PS_WorkOrder, PS_WorkOrder_Status } from './WorkOrder';
 
 // Interfaces
-export interface PS_Status_Update {
-    status?: string;
-    log?: string;
-    percent?: number;
-    disableFetchButton?: boolean;
-}
-
 export interface PS_Update_Options {
     // Status
     statuses: PS_WorkOrder_Status[];
@@ -42,13 +35,13 @@ export function newDatabase(options: PS_Update_Options): void {
 export async function loadDatabase(file: File): Promise<void> {
     cache = new PS_Database();
     await cache.loadFromFile(file);
-    signalStatusUpdateCallback({ log: "Imported database" });
-    signalStatusUpdateCallback({ log: "Verifying integrity" });
+    signalStatusUpdateCallback(`Imported database`);
+    signalStatusUpdateCallback(`Verifying integrity`);
 
     if (cache.verify())
-        signalStatusUpdateCallback({ log: "All checks passed" });
+        signalStatusUpdateCallback(`All checks passed`);
     else
-        signalStatusUpdateCallback({ log: "ERROR: Database failed integrity test" });
+        signalStatusUpdateCallback(`ERROR: Database failed integrity test`);
 }
 
 export function saveDatabase(): void {
@@ -59,7 +52,7 @@ export function saveDatabase(): void {
 
     cache.updateSaveTimestamp();
 
-    signalStatusUpdateCallback({ log: "Saving cache" });
+    signalStatusUpdateCallback(`Saving cache`);
 
     const data = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(cache, null, 2));
     const date: Date = new Date();
@@ -78,32 +71,29 @@ export async function buildUpdateList(options: PS_Update_Options): Promise<void>
     // Reset related cache vars
     cache_updateList = new Array();
 
-    // Disable fetch button
-    signalStatusUpdateCallback({ disableFetchButton: true });
-
     // Fetch that data!
     if (options.fetchExternal)
         for (let query of options.queries) {
-            signalStatusUpdateCallback({ log: "Processing query: " + query });
+            signalStatusUpdateCallback(`Processing query: ${query}`);
             await fetchProShopQuery(query, options);
         }
 
     // Does the user want to also search internal cache?
     if (options.fetchInternal) {
-        signalStatusUpdateCallback({ log: "Searching internal cache" });
+        signalStatusUpdateCallback(`Searching internal cache`);
         // Search for applicable work orders in our cache
         let matches: string[] = cache.getMatchingUpdateCriteria(options);
         for (let s of matches)
             if (!cache_updateList.includes(s))
                  cache_updateList.push(s);
 
-        signalStatusUpdateCallback({ log: "Found " + matches.length + " matching criteria" });
+        signalStatusUpdateCallback(`Found ${matches.length} matching criteria`);
     }
 
     // Check for unknown status work orders
     let unknowns: string[] = cache.getMatchingStatus(PS_WorkOrder_Status.UNKNOWN);
     if (unknowns.length) {
-        signalStatusUpdateCallback({ log: "Found " + unknowns.length + " of unknown status, attempting to update" });
+        signalStatusUpdateCallback(`Found ${unknowns.length} of unknown status, attempting to update`);
         cache_updateList.push(...unknowns);
     }
 
@@ -142,8 +132,8 @@ export function fetchProShopQuery(query: string, options: PS_Update_Options): Pr
                         cache_updateList.push(woList_index);*/
             });
     
-            signalStatusUpdateCallback({ log: "Found " + woList.length + " entries for " + query });
-            signalStatusUpdateCallback({ log: "Found " + (cache_updateList.length - temp) + " matching criteria" });
+            signalStatusUpdateCallback(`Found ${woList.length} entries for ${query}`);
+            signalStatusUpdateCallback(`Found ${cache_updateList.length - temp} matching criteria`);
         }).then(() => {
             resolve();
         });
@@ -151,11 +141,9 @@ export function fetchProShopQuery(query: string, options: PS_Update_Options): Pr
 }
 
 async function updateCache(): Promise<void> {
-    if (!cache_updateList.length) {
-        // We are done updating, re-enable the fetch button
-        signalStatusUpdateCallback({ disableFetchButton: false });
+    if (!cache_updateList.length)
         return;
-    } else if (cache_updateList.length === 1) {
+    else if (cache_updateList.length === 1) {
         await cache.fetchWorkOrder(cache_updateList.pop());
         console.log(new Date());
     } else {
@@ -163,10 +151,9 @@ async function updateCache(): Promise<void> {
     }
 
     cache_updateIndex++;
-    signalStatusUpdateCallback({
-        status: `${cache_updateIndex} of ${cache_updateTotal} work orders updated`,
-        percent: cache_updateIndex / cache_updateTotal * 100 
-    });
+    signalStatusUpdateCallback(
+        `${cache_updateIndex} of ${cache_updateTotal} work orders updated`,
+    );
 }
 
 export function getDatabaseStatus(): PS_Database_Status {
@@ -202,9 +189,9 @@ export function registerStatusUpdateCallback(callback: any) {
     statusUpdateCallback = callback;
 }
 
-export function signalStatusUpdateCallback(data: PS_Status_Update): void {
+export function signalStatusUpdateCallback(status: string): void {
     if (statusUpdateCallback !== undefined)
-        statusUpdateCallback(data);
+        statusUpdateCallback(status);
 }
 
 function getSaveFileDate(): string {
@@ -213,9 +200,9 @@ function getSaveFileDate(): string {
 
     temp += date.getFullYear()    + "-";
     temp += (date.getMonth() + 1) + "-";
-    temp += date.getDate()        + " ";
-    temp += date.getHours()       + "-";
-    temp += date.getMinutes();
+    temp += date.getDate()        + "@";
+    temp += ('0' + date.getHours()).slice(-2) + "-";
+    temp += ('0' + date.getMinutes()).slice(-2);
 
     return temp;
 }
