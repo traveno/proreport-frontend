@@ -1,8 +1,9 @@
-<div class="card shadow">
+<div class="card">
     <div class="card-header">
-        <i class="bi bi-clipboard2-check"></i> Quick Date Range Export (Proof of Concept)
+        <i class="bi bi-clipboard2-check"></i> Quick Date Range Export <span class="poc">(Proof of Concept Module)</span>
     </div>
     <div class="card-body">
+        <p>Searches for all completed OP 60s & OP 500s within specified date range...</p>
         <ngb-datepicker #dp (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden">
         </ngb-datepicker>
         
@@ -17,7 +18,7 @@
         </span>
         </ng-template>
     </div>
-    <div class="card-footer">
-        <button type="button" class="btn btn-lg btn-primary" placement="top" ngbTooltip="Generate .csv" (click)="submit()" [disabled]="!readyToSubmit()">Export</button>
+    <div class="card-footer text-center">
+        <button type="button" class="btn btn-lg btn-primary" placement="top" ngbTooltip="Generate .csv" (click)="submit()" [disabled]="!readyToSubmit()">Export To CSV File</button>
     </div>
 </div>
