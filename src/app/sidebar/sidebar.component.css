@@ -1,24 +1,35 @@
 .side-nav-bar {
-    background: #1d1d1d;
-    width: 10rem;
+    position: relative;
+    width: 8rem;
     min-height: 100%;
 }
 
 .fixed {
-    width: 10rem;
+    width: 8rem;
     position: fixed;
+    top: 50%;
+    background-color: #292929;
+    border-radius: 5px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    transform: translateY(-50%);
 }
 
 a {
     border-radius: 0 !important;
     padding-top: 15px;
     padding-bottom: 15px;
-    color: #3485ff;
+    color: #292929;
+    border-radius: 5px;
+}
+
+.nav-link {
+    color: #888;
 }
 
 .nav-link.active {
     color: #FFF;
-    background-color: #1d1d1d;
+    background-color: #292929;
 }
 
 .nav-link:hover {
@@ -26,7 +37,7 @@ a {
 }
 
 .logo {
-    padding-top: 25px;
+    padding-top: 0px;
     max-width: 70%;
 }
 
