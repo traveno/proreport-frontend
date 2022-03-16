@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ConnectionsService } from '../connections.service';
 import { DatabaseService } from '../database.service';
+import { DefinitionsService } from '../definitions.service';
 import { PS_Update_Options } from '../proshop/ProData';
 import { PS_WorkOrder_Status } from '../proshop/WorkOrder';
 
@@ -11,14 +12,9 @@ import { PS_WorkOrder_Status } from '../proshop/WorkOrder';
   styleUrls: ['./fetch-controls.component.css']
 })
 export class FetchControlsComponent implements OnInit {
-  departments = new FormGroup({
-    haas: new FormControl(true),
-    dmu: new FormControl(true),
-    mam: new FormControl(true),
-    mak: new FormControl(true),
-    lathe: new FormControl(true)
+  // These are generated based on imported company definitions
+  departments = new FormGroup({});
 
-  });
   statuses = new FormGroup({
     active: new FormControl(true),
     mfgcomplete: new FormControl(true),
@@ -34,9 +30,12 @@ export class FetchControlsComponent implements OnInit {
   });
 
 
-  constructor(public dbService: DatabaseService, public connService: ConnectionsService) { }
+  constructor(public dbService: DatabaseService, public connService: ConnectionsService, public defService: DefinitionsService) { }
 
   ngOnInit(): void {
+    // Import machine definitions
+    for (let d of this.defService.getDefinitions().departments)
+      this.departments.addControl(d.department.toString(), new FormControl(true));
   }
 
   readyToSubmit(): boolean {
@@ -54,33 +53,11 @@ export class FetchControlsComponent implements OnInit {
 
     let deptValues = this.departments.getRawValue();
 
-    if (deptValues.haas) {
-      options.queries.push('query56');
-      options.machines.push('HAAS')
-    }
-
-    if (deptValues.dmu) {
-      options.queries.push('query55');
-      options.machines.push('DMU')
-    }
-
-    if (deptValues.mam) {
-      options.queries.push('query58');
-      options.machines.push('MAM')
-    }
-
-    if (deptValues.mak) {
-      options.queries.push('query57');
-      options.machines.push('MAK')
-    }
-
-    if (deptValues.lathe) {
-      options.queries.push('query59');
-      options.machines.push("NL2500");
-      options.machines.push("NLX2500");
-      options.machines.push("NT1000");
-      options.machines.push("NTX2000");
-      options.machines.push("L2-20");
+    for (let d of this.defService.getDefinitions().departments) {
+      if (this.departments.controls[d.department].value) {
+        options.machines.push(...d.machines);
+        options.queries.push(d.query);
+      }
     }
 
     let statusValues = this.statuses.getRawValue();
