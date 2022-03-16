@@ -47,8 +47,7 @@ export class DatabaseService {
       let op60  = wo.getRoutingTableRow('60');
       let op500 = wo.getRoutingTableRow('500');
 
-      if (op60) {
-        console.log(op60.completeTotal);
+      if (op60) {=
         // Check if OP is complete and we're inside date range
         if (op60.complete && op60.completeDate !== undefined) {
           if (op60.completeDate > fromDate && op60.completeDate < toDate) {

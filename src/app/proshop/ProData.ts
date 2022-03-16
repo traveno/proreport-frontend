@@ -145,7 +145,6 @@ async function updateCache(): Promise<void> {
         return;
     else if (cache_updateList.length === 1) {
         await cache.fetchWorkOrder(cache_updateList.pop());
-        console.log(new Date());
     } else {
         await cache.fetchWorkOrder(cache_updateList.pop(), updateCache);
     }
