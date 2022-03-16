@@ -8,6 +8,7 @@ export interface PS_WorkOrder_OpRow {
     opDesc: string,
     resource: string,
     complete: boolean,
+    completeTotal?: number,
     completeDate?: Date;
 }
 
@@ -18,6 +19,8 @@ export interface PS_WorkOrder_TrackingRow {
 export class PS_WorkOrder {
     index: string = '00-0000';
     status: PS_WorkOrder_Status = PS_WorkOrder_Status.UNKNOWN;
+    orderQuantity: number = -1;
+    orderValue: number = -1;
     
     routingTable: PS_WorkOrder_OpRow[] = [];
 
@@ -26,6 +29,8 @@ export class PS_WorkOrder {
 
         this.index = copy.index;
         this.status = copy.status;
+        this.orderQuantity = copy.orderQuantity;
+        this.orderValue = copy.orderValue;
         this.routingTable = [];
 
         for (let row of copy.routingTable) {
@@ -34,17 +39,15 @@ export class PS_WorkOrder {
                 opDesc: row.opDesc,
                 resource: row.resource,
                 complete: row.complete,
+                completeTotal: row.completeTotal,
                 completeDate: row.completeDate !== undefined ? new Date(row.completeDate) : undefined
             });
         }
     }
 
-    createFromIndex(index: string): Promise<void> {
-        return new Promise(resolve => {
-            this.index = index;
-            this.fetch();
-            resolve()
-        });
+    async createFromIndex(index: string): Promise<void> {
+        this.index = index;
+        await this.fetch();
     }
 
     fetch(): Promise<void> {
@@ -56,6 +59,8 @@ export class PS_WorkOrder {
                 // Set our work order's internal data
                 let status: string = $(doc).find("#horizontalMainAtts_status_value").text();
                 let routingTable: any = $(doc).find("table.proshop-table").eq(5);
+                this.orderQuantity = Number($(doc).find('#horizontalMainAtts_quantityordered_value').text());
+                this.orderValue = -1;
     
                 this.setStatusFromString(status);
                 this.parseRoutingTable(routingTable);
@@ -76,6 +81,9 @@ export class PS_WorkOrder {
             let rowDesc: string = $(this).find("td:nth-of-type(2)").text();
             let rowResource: string = $(this).find("td:nth-of-type(3)").text()
             let rowComplete: boolean = $(this).find("td:nth-of-type(10) span").hasClass("glyphicon-ok");
+
+            let rowCompleteTotal: number | undefined = undefined;
+            rowCompleteTotal = Number($(this).find('td:nth-child(7)').text());
 
             let rowCompleteDate: Date | undefined = undefined;
             let temp: string | null = $(this).find("td:nth-of-type(10) span").attr("title");
@@ -104,6 +112,7 @@ export class PS_WorkOrder {
                 opDesc: rowDesc,
                 resource: rowResource,
                 complete: rowComplete,
+                completeTotal: rowCompleteTotal,
                 completeDate: rowCompleteDate
             });
         });
@@ -113,12 +122,17 @@ export class PS_WorkOrder {
     }
 
     matchesUpdateCriteria(options: PS_Update_Options): boolean {
+        // Hardcoded to always attempt to update unknown status work orders
+        if (this.status === PS_WorkOrder_Status.UNKNOWN && 
+            options.statuses.includes(PS_WorkOrder_Status.UNKNOWN))
+            return true;
+
         if (!options.statuses.includes(this.status))
             return false;
 
         for (let row of this.routingTable) 
             for (let machine of options.machines) {
-                if (row.resource.slice(0, machine.length).toLowerCase() === machine.toLocaleLowerCase())
+                if (row.resource.slice(0, machine.length).toLowerCase() === machine.toLowerCase())
                     return true;
             }
         return false;
