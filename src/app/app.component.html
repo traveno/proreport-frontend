@@ -1,11 +1,8 @@
-<div class="d-flex">
-  <app-sidebar></app-sidebar>
+<div class="d-flex flex-row">
+  <div id="nav-content-wrapper">
+    <app-sidebar></app-sidebar>
+  </div>
   <div class="container mt-4" id="page-content-wrapper">
-    <div class="row">
-      <div *ngIf="!isDatabaseLoaded()">
-        <ngb-alert class="shadow" [dismissible]="false">No database has been loaded</ngb-alert>
-      </div>
-    </div>
     <router-outlet></router-outlet>
   </div>
 </div>

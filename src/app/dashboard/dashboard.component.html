@@ -1,4 +1,9 @@
 <div class="row">
+    <div *ngIf="!isDatabaseLoaded()">
+      <ngb-alert [dismissible]="false" type="danger">Database not initialized, please import or create new database</ngb-alert>
+    </div>
+</div>
+<div class="row gx-3">
     <div class="col mt-2">
         <app-db-controls></app-db-controls>
         <app-fetch-controls></app-fetch-controls>
