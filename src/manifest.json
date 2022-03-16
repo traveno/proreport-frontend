@@ -1,17 +1,17 @@
 {
-  "name": "Shop Meister",
+  "name": "ProReport",
   "description": "Reporting package for the ProShop ERP solution.",
   "author": "Stephen Fike",
-  "version": "0.0.1",
-  "version_name": "0.0.1-alpha",
+  "version": "0.0.5",
+  "version_name": "0.0.5-alpha",
   "manifest_version": 3,
-  "permissions": ["tabs", "webRequest"],
+  "permissions": ["tabs", "storage"],
   "host_permissions": ["https://*.adionsystems.com/*"],
   "background": {
     "service_worker": "background.js"
   },
   "action": {
-    "default_title": "Click me"
+    "default_title": "Launch ProReport"
   },
   "content_scripts": [],
   "web_accessible_resources": []
