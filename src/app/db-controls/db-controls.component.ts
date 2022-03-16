@@ -72,8 +72,8 @@ function getSimpleDate(time: Date): string {
   temp += (time.getMonth() + 1) + "/";
   temp += time.getDate() + "/";
   temp += time.getFullYear() + " ";
-  temp += time.getHours() + ":";
-  temp += time.getMinutes();
+  temp += ('0' + time.getHours()).slice(-2) + ":";
+  temp += ('0' + time.getMinutes()).slice(-2);
 
   return temp;
 }
