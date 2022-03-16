@@ -1,6 +1,7 @@
 import { temporaryAllocator } from '@angular/compiler/src/render3/view/util';
 import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from '../database.service';
+import { DefinitionsService } from '../definitions.service';
 import { PS_WorkOrder_Status } from '../proshop/WorkOrder';
 
 @Component({
@@ -9,16 +10,14 @@ import { PS_WorkOrder_Status } from '../proshop/WorkOrder';
   styleUrls: ['./activity-overview.component.css']
 })
 export class ActivityOverviewComponent implements OnInit {
-  MACHINES: string[] = ['HAAS', 'DMU', 'MAM', 'MAK', 'LATHE'];
-
   active = 0;
 
-  constructor(public dbService: DatabaseService) { }
+  constructor(public dbService: DatabaseService, public defService: DefinitionsService) { }
 
   ngOnInit(): void {
   }
 
-  getMachineActivity(machine: string): any {
+  updateMachineActivity(machine: string): any {
     if (!this.dbService.isInitialized())
       return;
 
@@ -52,7 +51,6 @@ export class ActivityOverviewComponent implements OnInit {
         temp.push(this.generateActivityRow('NTX2000'));
         temp.push(this.generateActivityRow('L2-20'));
     }
-    
 
     return temp;
   }
@@ -66,8 +64,4 @@ export class ActivityOverviewComponent implements OnInit {
       invoiced: this.dbService.getMatchingWordOrders({ resource: machine, status: PS_WorkOrder_Status.INVOICED }).length,
     }
   }
-
-
-
-
 }

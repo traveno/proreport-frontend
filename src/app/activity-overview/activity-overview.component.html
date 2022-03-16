@@ -1,14 +1,14 @@
-<div class="card shadow">
+<div class="card">
   <div class="card-header">
     <i class="bi bi-activity"></i>
     Activity Overview
   </div>
   <div class="card-body">
     <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs nav-fill">
-      <li *ngFor="let m of MACHINES" [ngbNavItem]="MACHINES.indexOf(m)">
-        <a ngbNavLink>{{m}}</a>
+      <li *ngFor="let d of defService.getDefinitions().departments" [ngbNavItem]="defService.getDefinitions().departments.indexOf(d)">
+        <a ngbNavLink>{{d.department}}</a>
         <ng-template ngbNavContent>
-          <table class="table table-striped table-hover" id="table-haas">
+          <table class="table table-striped table-hover">
             <thead>
               <tr>
                 <th scope="col">Machine</th>
@@ -19,9 +19,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let d of getMachineActivity(m)">
-                <td>{{d.name}}</td><td>{{d.active}}</td><td>{{d.mfgcomplete}}</td><td>{{d.shipped}}</td><td>{{d.invoiced}}</td>
-              </tr>
+              <ng-container *ngFor="let a of updateMachineActivity(d.department)">
+                <tr>
+                  <td>{{a.name}}</td><td>{{a.active}}</td><td>{{a.mfgcomplete}}</td><td>{{a.shipped}}</td><td>{{a.invoiced}}</td>
+                </tr>
+             </ng-container>
             </tbody>
           </table>
         </ng-template>
