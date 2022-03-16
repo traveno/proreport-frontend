@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -15,6 +15,9 @@ import { ConnectionsComponent } from './connections/connections.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ReportingComponent } from './reporting/reporting.component';
 import { AppRoutingModule } from './app-routing.module';
+import { QuickButtonsComponent } from './quick-buttons/quick-buttons.component';
+import { DefinitionsService } from './definitions.service';
+import { async } from '@angular/core/testing';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,8 @@ import { AppRoutingModule } from './app-routing.module';
     AboutComponent,
     ConnectionsComponent,
     DashboardComponent,
-    ReportingComponent
+    ReportingComponent,
+    QuickButtonsComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +40,20 @@ import { AppRoutingModule } from './app-routing.module';
     ReactiveFormsModule,
     AppRoutingModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initServices,
+      deps: [DefinitionsService],
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+export function initServices(defService: DefinitionsService) {
+  return async () => {
+    await defService.loadDefinitions();
+  }
+}
