@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { from, Subject } from 'rxjs';
 import { PS_Database_Filter } from './proshop/Database';
 
 import * as ProData from './proshop/ProData';
@@ -28,6 +28,66 @@ export class DatabaseService {
 
   getMatchingWordOrders(options: PS_Database_Filter): PS_WorkOrder[] {
     return ProData.getMatchingWorkOrders(options);
+  }
+
+  exportDatedCSV(fromDate: Date, toDate: Date): void {
+    let csvContent: string = 'data:text/csv;charset=utf-8,';
+    let workorders = ProData.getAllWorkOrders();
+
+    for (let wo of workorders) {
+
+
+      let op60  = wo.getRoutingTableRow('60');
+      let op500 = wo.getRoutingTableRow('500');
+
+      if (op60) {
+        console.log(op60.completeTotal);
+        // Check if OP is complete and we're inside date range
+        if (op60.complete && op60.completeDate !== undefined) {
+          if (op60.completeDate > fromDate && op60.completeDate < toDate) {
+            csvContent += op60.completeDate.toDateString() + ',';
+            csvContent += wo.index + ',';
+            csvContent += op60.op + ',';
+            csvContent += op60.opDesc + ',';
+            csvContent += op60.resource + ',';
+            csvContent += op60.completeTotal + ',';
+            csvContent += wo.orderValue + ',';
+            csvContent += wo.orderQuantity + ',';
+            // Per piece
+            csvContent += '-1\n';
+          }
+        }
+      }
+
+      if (op500) {
+        // Check if OP is complete and we're inside date range
+        if (op500.complete && op500.completeDate) {
+          if (op500.completeDate > fromDate && op500.completeDate < toDate) {
+            csvContent += op500.completeDate.toDateString() + ',';
+            csvContent += wo.index + ',';
+            csvContent += op500.op + ',';
+            csvContent += op500.opDesc + ',';
+            csvContent += op500.resource + ',';
+            csvContent += ','; // Complete total is always 0
+            csvContent += wo.orderValue + ',';
+            csvContent += wo.orderQuantity + ',';
+            // Per piece
+            csvContent += '-1\n';
+          }
+        }
+      }
+    }
+    
+    let encodedURI: string = encodeURI(csvContent);
+    let downloadButton = document.createElement("a");
+    downloadButton.setAttribute('href', encodedURI);
+    downloadButton.setAttribute('download', 'exported_data');
+    document.body.appendChild(downloadButton);
+    downloadButton.click();
+
+    console.log(fromDate);
+    console.log(toDate);
+    console.log(toDate > fromDate)
   }
 
   async loadDatabase(file: File) {
