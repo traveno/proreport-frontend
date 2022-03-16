@@ -46,7 +46,7 @@ export async function loadDatabase(file: File): Promise<void> {
     signalStatusUpdateCallback({ log: "Verifying integrity" });
 
     if (cache.verify())
-        signalStatusUpdateCallback({ log: "Database passed all checks" });
+        signalStatusUpdateCallback({ log: "All checks passed" });
     else
         signalStatusUpdateCallback({ log: "ERROR: Database failed integrity test" });
 }
@@ -98,7 +98,14 @@ export async function buildUpdateList(options: PS_Update_Options): Promise<void>
                  cache_updateList.push(s);
 
         signalStatusUpdateCallback({ log: "Found " + matches.length + " matching criteria" });
-    }    
+    }
+
+    // Check for unknown status work orders
+    let unknowns: string[] = cache.getMatchingStatus(PS_WorkOrder_Status.UNKNOWN);
+    if (unknowns.length) {
+        signalStatusUpdateCallback({ log: "Found " + unknowns.length + " of unknown status, attempting to update" });
+        cache_updateList.push(...unknowns);
+    }
 
     cache_updateTotal = cache_updateList.length;
     cache_updateIndex = 0;
@@ -110,7 +117,7 @@ export async function buildUpdateList(options: PS_Update_Options): Promise<void>
     cache.updateDataTimestamp();
 }
 
-export function fetchProShopQuery(query: string, options: PS_Update_Options): Promise<boolean> {
+export function fetchProShopQuery(query: string, options: PS_Update_Options): Promise<void> {
     return new Promise(resolve => {
         fetch(BASE_URL + "/procnc/workorders/searchresults$queryScope=global&queryName=" + query + "&pName=workorders").then(res => res.text()).then(html => {
             let parser: DOMParser = new DOMParser();
@@ -138,7 +145,7 @@ export function fetchProShopQuery(query: string, options: PS_Update_Options): Pr
             signalStatusUpdateCallback({ log: "Found " + woList.length + " entries for " + query });
             signalStatusUpdateCallback({ log: "Found " + (cache_updateList.length - temp) + " matching criteria" });
         }).then(() => {
-            resolve(true);
+            resolve();
         });
     });
 }
@@ -157,7 +164,7 @@ async function updateCache(): Promise<void> {
 
     cache_updateIndex++;
     signalStatusUpdateCallback({
-        status: getUpdateRemaining() + " remaining",
+        status: `${cache_updateIndex} of ${cache_updateTotal} work orders updated`,
         percent: cache_updateIndex / cache_updateTotal * 100 
     });
 }
@@ -195,7 +202,7 @@ export function registerStatusUpdateCallback(callback: any) {
     statusUpdateCallback = callback;
 }
 
-function signalStatusUpdateCallback(data: PS_Status_Update): void {
+export function signalStatusUpdateCallback(data: PS_Status_Update): void {
     if (statusUpdateCallback !== undefined)
         statusUpdateCallback(data);
 }
@@ -211,6 +218,10 @@ function getSaveFileDate(): string {
     temp += date.getMinutes();
 
     return temp;
+}
+
+export function getAllWorkOrders(): PS_WorkOrder[] {
+    return cache.getAllWorkOrders();
 }
 
 function parseStatusToEnum(inputString: string): PS_WorkOrder_Status {
