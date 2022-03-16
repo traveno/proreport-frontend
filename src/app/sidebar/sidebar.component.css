@@ -1,20 +1,36 @@
-.navbar-brand {
-    padding-top: 100px;
-    padding-left: 20px;
-}
-
 .side-nav-bar {
-    background: rgb(255,255,255);
+    background: #1d1d1d;
     width: 10rem;
     min-height: 100%;
+}
+
+.fixed {
+    width: 10rem;
+    position: fixed;
 }
 
 a {
     border-radius: 0 !important;
     padding-top: 15px;
     padding-bottom: 15px;
+    color: #3485ff;
 }
 
 .nav-link.active {
     color: #FFF;
+    background-color: #1d1d1d;
+}
+
+.nav-link:hover {
+    color: #FFF;
+}
+
+.logo {
+    padding-top: 25px;
+    max-width: 70%;
+}
+
+.version {
+    color: #FFF;
+    bottom: 0;
 }
