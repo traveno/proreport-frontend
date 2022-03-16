@@ -1,5 +1,5 @@
 import { PS_WorkOrder, PS_WorkOrder_OpRow, PS_WorkOrder_Status } from './WorkOrder';
-import { BASE_URL, PS_Update_Options } from './ProData';
+import { BASE_URL, PS_Update_Options, signalStatusUpdateCallback } from './ProData';
 
 export enum PS_Database_Status { EMPTY = 0, OUTDATED, OK, ERROR, UNSAVED_CHANGES }
 
@@ -57,10 +57,21 @@ export class PS_Database {
     }
 
     getMatchingUpdateCriteria(options: PS_Update_Options): string[] {
-        let temp: string[] = new Array();
+        let temp: string[] = [];
 
         for (let wo of this.workorders) {
             if (wo.matchesUpdateCriteria(options))
+                temp.push(wo.index);
+        }
+        
+        return temp;
+    }
+
+    getMatchingStatus(status: PS_WorkOrder_Status): string[] {
+        let temp: string[] = []
+
+        for (let wo of this.workorders) {
+            if (wo.getStatus() === PS_WorkOrder_Status.UNKNOWN)
                 temp.push(wo.index);
         }
         
@@ -73,6 +84,10 @@ export class PS_Database {
 
     getNumberOfEntries(): number {
         return this.workorders.length;
+    }
+
+    getAllWorkOrders(): PS_WorkOrder[] {
+        return this.workorders;
     }
 
     updateDataTimestamp(): void {
