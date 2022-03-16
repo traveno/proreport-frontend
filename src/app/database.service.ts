@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { from, Subject } from 'rxjs';
+import { DefinitionsService } from './definitions.service';
 import { PS_Database_Filter } from './proshop/Database';
 
 import * as ProData from './proshop/ProData';
@@ -12,10 +13,16 @@ import { PS_WorkOrder, PS_WorkOrder_Status } from './proshop/WorkOrder';
 export class DatabaseService {
   logEmitter = new Subject<string>();
   dbStatusEmitter = new Subject<any>();
-  testdata = ['test data1', 'test data5', 'test data214'];
 
-  constructor(private http: HttpClient) {
-    ProData.registerStatusUpdateCallback((data: ProData.PS_Status_Update) => this.statusCallback(data));
+  constructor(private defService: DefinitionsService) {
+    ProData.registerStatusUpdateCallback((status: string) => {
+      this.logEmitter.next(status)
+      this.dbStatusEmitter.next({
+        status: ProData.getDatabaseStatus(),
+        entries: ProData.getNumberOfEntries(),
+        timestamp: ProData.getDataTimestamp()
+      });
+    });
   }
 
   isInitialized(): boolean {
@@ -84,10 +91,6 @@ export class DatabaseService {
     downloadButton.setAttribute('download', 'exported_data');
     document.body.appendChild(downloadButton);
     downloadButton.click();
-
-    console.log(fromDate);
-    console.log(toDate);
-    console.log(toDate > fromDate)
   }
 
   async loadDatabase(file: File) {
@@ -97,13 +100,6 @@ export class DatabaseService {
       entries: ProData.getNumberOfEntries(),
       timestamp: ProData.getDataTimestamp()
     });
-  }
-
-  statusCallback(data: ProData.PS_Status_Update) {
-    if (data.log)
-      this.logEmitter.next(data.log);
-    if (data.status)
-      this.logEmitter.next(data.status);
   }
 
   newDatabase() {
@@ -116,7 +112,6 @@ export class DatabaseService {
     };
 
     // Status criteria
-
     options.statuses.push(PS_WorkOrder_Status.ACTIVE);
     options.statuses.push(PS_WorkOrder_Status.MANUFACTURING_COMPLETE);
     options.statuses.push(PS_WorkOrder_Status.SHIPPED);
@@ -126,11 +121,8 @@ export class DatabaseService {
     options.statuses.push(PS_WorkOrder_Status.COMPLETE);
 
     // Department criteria
-    options.queries.push("query56");
-    options.queries.push("query55");
-    options.queries.push("query58");
-    options.queries.push("query57");
-    options.queries.push("query59");
+    for (let d of this.defService.getDefinitions().departments)
+      options.queries.push(d.query);
 
     ProData.newDatabase(options);
   }
