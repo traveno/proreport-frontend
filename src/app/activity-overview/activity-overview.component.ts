@@ -17,39 +17,14 @@ export class ActivityOverviewComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  updateMachineActivity(machine: string): any {
+  getDepartmentActivity(resources: string[]): any {
     if (!this.dbService.isInitialized())
       return;
 
     let temp = new Array();
 
-    if (machine === 'HAAS') {
-      for (let i = 1; i <= 7; i++)
-        temp.push(this.generateActivityRow(machine + i));
-      temp.push(this.generateActivityRow('ROBO'));
-    }
-
-    if (machine === 'DMU')
-      for (let i = 1; i <= 4; i++)
-        temp.push(this.generateActivityRow(machine + i));
-    
-
-    if (machine === 'MAM')
-      for (let i = 1; i <= 3; i++)
-        temp.push(this.generateActivityRow(machine + i));
-    
-
-    if (machine === 'MAK')
-      for (let i = 1; i <= 7; i++)
-        temp.push(this.generateActivityRow(machine + i));
-    
-
-    if (machine === 'LATHE') {
-        temp.push(this.generateActivityRow('NL2500'));
-        temp.push(this.generateActivityRow('NLX2500'));
-        temp.push(this.generateActivityRow('NT1000'));
-        temp.push(this.generateActivityRow('NTX2000'));
-        temp.push(this.generateActivityRow('L2-20'));
+    for (let resource of resources) {
+      temp.push(this.generateActivityRow(resource));
     }
 
     return temp;
