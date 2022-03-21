@@ -18,6 +18,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { QuickButtonsComponent } from './quick-buttons/quick-buttons.component';
 import { DefinitionsService } from './definitions.service';
 import { async } from '@angular/core/testing';
+import { NgChartsModule } from 'ng2-charts';
+import { LineChartComponent } from './line-chart/line-chart.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,8 @@ import { async } from '@angular/core/testing';
     ConnectionsComponent,
     DashboardComponent,
     ReportingComponent,
-    QuickButtonsComponent
+    QuickButtonsComponent,
+    LineChartComponent
   ],
   imports: [
     BrowserModule,
@@ -39,6 +42,7 @@ import { async } from '@angular/core/testing';
     HttpClientModule,
     ReactiveFormsModule,
     AppRoutingModule,
+    NgChartsModule,
   ],
   providers: [
     {
