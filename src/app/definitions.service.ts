@@ -10,7 +10,7 @@ export class DefinitionsService {
 
   getDefinitions(): DefinitionsObject {
     if (this.DEFINITIONS === undefined)
-      throw Error();
+      throw Error('Definitions undefined. Does definitions.json exist?');
 
     return this.DEFINITIONS;
   }
@@ -26,11 +26,11 @@ export class DefinitionsService {
   }
 }
 
-interface DefinitionsObject {
+export interface DefinitionsObject {
   departments: DeptObj[]
 }
 
-interface DeptObj {
+export interface DeptObj {
   department: string,
   pretty: string,
   machines: string[],
