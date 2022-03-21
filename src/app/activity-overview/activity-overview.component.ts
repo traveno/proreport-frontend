@@ -1,7 +1,7 @@
 import { temporaryAllocator } from '@angular/compiler/src/render3/view/util';
 import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from '../database.service';
-import { DefinitionsService } from '../definitions.service';
+import { DefinitionsService, DeptObj } from '../definitions.service';
 import { PS_WorkOrder_Status } from '../proshop/WorkOrder';
 
 @Component({
@@ -17,15 +17,14 @@ export class ActivityOverviewComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getDepartmentActivity(resources: string[]): any {
+  getDepartmentActivity(dept: DeptObj): any {
     if (!this.dbService.isInitialized())
       return;
 
     let temp = new Array();
 
-    for (let resource of resources) {
+    for (let resource of dept.machines)
       temp.push(this.generateActivityRow(resource));
-    }
 
     return temp;
   }

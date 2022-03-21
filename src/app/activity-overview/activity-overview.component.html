@@ -19,7 +19,7 @@
               </tr>
             </thead>
             <tbody>
-              <ng-container *ngFor="let a of getDepartmentActivity(d.machines)">
+              <ng-container *ngFor="let a of getDepartmentActivity(d)">
                 <tr>
                   <td>{{a.name}}</td><td>{{a.active}}</td><td>{{a.mfgcomplete}}</td><td>{{a.shipped}}</td><td>{{a.invoiced}}</td>
                 </tr>
