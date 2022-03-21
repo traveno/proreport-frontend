@@ -12,7 +12,7 @@ export interface PS_Database_Filter {
 export class PS_Database {
     private timestamp_data: Date;
     private timestamp_save: Date;
-    private workorders: PS_WorkOrder[] = new Array();;
+    private workorders: PS_WorkOrder[] = new Array();
 
     constructor() {
         this.timestamp_data = new Date();
@@ -63,7 +63,7 @@ export class PS_Database {
             if (wo.matchesUpdateCriteria(options))
                 temp.push(wo.index);
         }
-        
+
         return temp;
     }
 
@@ -74,7 +74,7 @@ export class PS_Database {
             if (wo.getStatus() === PS_WorkOrder_Status.UNKNOWN)
                 temp.push(wo.index);
         }
-        
+
         return temp;
     }
 
@@ -104,14 +104,14 @@ export class PS_Database {
 
     filter(options: PS_Database_Filter): PS_WorkOrder[] {
         let temp: PS_WorkOrder[] = new Array();
-        
+
         // We begin
         for (let wo of this.workorders) {
             // Filter by work order status if defined
-            if (options.status !== undefined) 
-                if (wo.status !== options.status) 
+            if (options.status !== undefined)
+                if (wo.status !== options.status)
                     continue;
-               
+
             // Filter by machine resource (all ops) if defined
             if (options.resource !== undefined)
                 if (!wo.containsResource(options.resource))
@@ -143,18 +143,15 @@ export class PS_Database {
     }
 
     verify(): boolean {
-        console.log("Check for duplicates...");
         for (let wo of this.workorders) {
             for (let test of this.workorders) {
                 if (this.workorders.indexOf(wo) !== this.workorders.indexOf(test) &&
                     wo == test) {
-                    console.log("I found a duplicate! Invalid cache");
                     return false;
                 }
             }
         }
 
-        console.log("All checks passed!");
         return true;
     }
 }
