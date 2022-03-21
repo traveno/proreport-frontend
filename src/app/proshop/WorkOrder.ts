@@ -52,7 +52,7 @@ export class PS_WorkOrder {
 
     fetch(): Promise<void> {
         return new Promise(resolve => {
-            fetch(BASE_URL + "/procnc/workorders/" + this.index).then(res => res.text()).then(html => {
+            fetch(`${BASE_URL}/procnc/workorders/${this.index}`).then(res => res.text()).then(html => {
                 let parser: DOMParser = new DOMParser();
                 let doc: Document = parser.parseFromString(html, "text/html");
     
@@ -145,7 +145,7 @@ export class PS_WorkOrder {
 
     containsResource(resource: string): boolean {
         for (let row of this.routingTable) {
-            if (row.resource.toLowerCase() === resource.trim().toLowerCase())
+            if (row.resource.toLowerCase() === resource.toLowerCase())
                 return true;
         }
         return false;
