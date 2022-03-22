@@ -4,7 +4,23 @@
     Connections
   </div>
   <div class="card-body">
-    <div *ngIf="this.connService.getConnected()" style="color: green;">
+    <div class="proshop text-center">
+      <img src="assets/proshop-logo.png" style="width: 100%;">
+      <div *ngIf="this.connService.getConnected()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16" style="color: green;" placement="right" ngbTooltip="User ID: {{this.connService.getUserId()}}">
+          <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+          <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+        </svg>
+      </div>
+      <div *ngIf="!this.connService.getConnected()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16" style="color: red;" placement="right" ngbTooltip="Are you logged in to ProShop?">
+          <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+          <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- <div *ngIf="this.connService.getConnected()" style="color: green;">
       <i class="bi bi-check2-circle"></i> ProShop front end (user id: {{this.connService.getUserId()}})
     </div>
     <div *ngIf="!this.connService.getConnected()" style="color: red;">
@@ -15,6 +31,6 @@
     <div *ngIf="this.connService.getPermissions().sensitive" style="color: green;"><i class="bi bi-check-lg"></i> sensitive data read permissions</div>
     <div *ngIf="!this.connService.getPermissions().workorders" style="color: red;"><i class="bi bi-x-lg"></i> work order read permissions</div>
     <div *ngIf="!this.connService.getPermissions().parts" style="color: red;"><i class="bi bi-x-lg"></i> parts read permissions</div>
-    <div *ngIf="!this.connService.getPermissions().sensitive" style="color: red;"><i class="bi bi-x-lg"></i> sensitive data read permissions</div>
+    <div *ngIf="!this.connService.getPermissions().sensitive" style="color: red;"><i class="bi bi-x-lg"></i> sensitive data read permissions</div> -->
   </div>
 </div>
