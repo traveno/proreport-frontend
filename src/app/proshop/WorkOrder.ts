@@ -13,7 +13,13 @@ export interface PS_WorkOrder_OpRow {
 }
 
 export interface PS_WorkOrder_TrackingRow {
-
+    timeStarted: Date,
+    timeEnded?: Date,
+    op: number,
+    resource: string,
+    beginQuantity: number,
+    endQuantity: number,
+    totalRun: number
 }
 
 export class PS_WorkOrder {
@@ -23,6 +29,7 @@ export class PS_WorkOrder {
     orderValue: number = -1;
     
     routingTable: PS_WorkOrder_OpRow[] = [];
+    trackingTable: PS_WorkOrder_TrackingRow[] = [];
 
     constructor(copy?: PS_WorkOrder) {
         if (!copy) return;
@@ -31,8 +38,8 @@ export class PS_WorkOrder {
         this.status = copy.status;
         this.orderQuantity = copy.orderQuantity;
         this.orderValue = copy.orderValue;
-        this.routingTable = [];
 
+        // Copy routing table
         for (let row of copy.routingTable) {
             this.routingTable.push({
                 op: row.op,
@@ -41,6 +48,19 @@ export class PS_WorkOrder {
                 complete: row.complete,
                 completeTotal: row.completeTotal,
                 completeDate: row.completeDate !== undefined ? new Date(row.completeDate) : undefined
+            });
+        }
+
+        // Copy time tracking table
+        for (let row of copy.trackingTable) {
+            this.trackingTable.push({
+                timeStarted: new Date(row.timeStarted),
+                timeEnded: row.timeEnded ? new Date(row.timeEnded) : undefined,
+                op: row.op,
+                resource: row.resource,
+                beginQuantity: row.beginQuantity,
+                endQuantity: row.endQuantity,
+                totalRun: row.totalRun
             });
         }
     }
@@ -58,7 +78,7 @@ export class PS_WorkOrder {
     
                 // Set our work order's internal data
                 let status: string = $(doc).find("#horizontalMainAtts_status_value").text();
-                let routingTable: any = $(doc).find('table.proshop-table').eq(5);
+                let routingTable: Cash = $(doc).find('table.proshop-table').eq(5);
                 this.orderQuantity = Number($(doc).find('#horizontalMainAtts_quantityordered_value').text());
                 this.orderValue = -1;
     
@@ -66,48 +86,45 @@ export class PS_WorkOrder {
                 this.parseRoutingTable(routingTable);
 
                 // Done fetching external data for this work order
+
+                return fetch(`${BASE_URL}/procnc/procncAdmin/viewTimeTracking$viewType=byworkorder&currentYearWos=${this.index}&userId=all`);
+            }).then(res => res.text()).then(html => {
+                let parser: DOMParser = new DOMParser();
+                let doc: Document = parser.parseFromString(html, "text/html");
+
+                let trackingTable: Cash = $(doc).find('#dataTable > tbody > tr');
+
+                // Check if tracking table is zero length, if so, return
+                if (trackingTable.length === 0)
+                    return;
+
+                this.parseTrackingTable(trackingTable);
             }).then(() => {
                 resolve();
             });
         });
     }
 
-    parseRoutingTable(table: any): void {
-        let tableRows: any = $(table).find("tbody > tr");
-        let result: PS_WorkOrder_OpRow[] = [];
-    
-        $(tableRows).each(function() {
-            let rowOp: string = $(this).find("td:first-of-type > a").text();
-            let rowDesc: string = $(this).find("td:nth-of-type(2)").text();
-            let rowResource: string = $(this).find("td:nth-of-type(3)").text()
-            let rowComplete: boolean = $(this).find("td:nth-of-type(10) span").hasClass("glyphicon-ok");
+    parseRoutingTable(table: Cash): void {
+        let tableRows: Cash = $(table).find("tbody > tr");
+
+        for (let row of tableRows) {
+            let rowOp: string = $(row).find("td:first-of-type > a").text();
+            let rowDesc: string = $(row).find("td:nth-of-type(2)").text();
+            let rowResource: string = $(row).find("td:nth-of-type(3)").text()
+            let rowComplete: boolean = $(row).find("td:nth-of-type(10) span").hasClass("glyphicon-ok");
 
             let rowCompleteTotal: number | undefined = undefined;
-            rowCompleteTotal = Number($(this).find('td:nth-child(7)').text());
+            rowCompleteTotal = Number($(row).find('td:nth-child(7)').text());
 
             let rowCompleteDate: Date | undefined = undefined;
-            let temp: string | null = $(this).find("td:nth-of-type(10) span").attr("title");
+            let rowCompleteDate_string: string | null = $(row).find("td:nth-of-type(10) span").attr("title");
     
-            if (rowComplete && temp !== null) {
-                let month: number = parseInt(temp.split("/")[0].slice(-2));
-                let day: number = parseInt(temp.split("/")[1]);
-                let year: number = parseInt(temp.split("/")[2].slice(0, 4));
-                let hour: number = parseInt(temp.split(":")[1].slice(-2));
-                let minute: number = parseInt(temp.split(":")[2]);
-                let second: number = parseInt(temp.split(":")[3].slice(0, 2));
-    
-                // Convert 12hr to 24hr
-                if (temp.split(";")[1].slice(-2) === "PM" && hour !== 12)
-                    hour += 12;
-
-                if (temp.split(";")[1].slice(-2) === "AM" && hour === 12)
-                    hour -= 12;
-    
-                rowCompleteDate = new Date(year, month - 1, day, hour, minute, second);
+            if (rowComplete && rowCompleteDate_string !== null) {
+                rowCompleteDate = parseRoutingDate(rowCompleteDate_string)
             }
 
-            // Can't access class members from within jQuery loop
-            result.push({
+            this.routingTable.push({
                 op: rowOp,
                 opDesc: rowDesc,
                 resource: rowResource,
@@ -115,10 +132,43 @@ export class PS_WorkOrder {
                 completeTotal: rowCompleteTotal,
                 completeDate: rowCompleteDate
             });
-        });
+        }
+    }
 
-        // Apply our new routing table to this work order
-        this.routingTable = result;
+    parseTrackingTable(tableRows: Cash): void {
+        for (let row of tableRows) {
+            // For now, only track 'Running' category
+            if ($(row).find('td:nth-child(3)').text().trim() !== 'Running')
+                continue;
+
+            let rowTimeStarted: Date = parseTrackingDate($(row).find('td:nth-child(4) > span').text())!;
+            let rowTimeEnded:   Date | undefined = parseTrackingDate($(row).find('td:nth-child(5) > span').text());
+            let rowOp: number = Number($(row).find('td:nth-child(7)').text());
+            let rowResource: string = $(row).find('td:nth-child(8)').text().trim();
+
+            let quantities: string = $(row).find('td:nth-child(12) > span').text();
+
+            // Sometimes quantities are left blank, so we check for this
+            // and default values to zero
+            let rowBeginQty: number = 0;
+            let rowEndQty:   number = 0;
+            if (quantities !== '') {
+                rowBeginQty = Number($(row).find('td:nth-child(12) > span').text().split('/')[0]);
+                rowEndQty = Number($(row).find('td:nth-child(12) > span').text().split('/')[1]);
+            }
+            
+            let rowTotalRun: number = Number($(row).find('td:nth-child(13)').text());
+
+            this.trackingTable.push({
+                timeStarted: rowTimeStarted,
+                timeEnded: rowTimeEnded,
+                op: rowOp,
+                resource: rowResource,
+                beginQuantity: rowBeginQty,
+                endQuantity: rowEndQty,
+                totalRun: rowTotalRun
+            });
+        }
     }
 
     matchesUpdateCriteria(options: PS_Update_Options): boolean {
@@ -179,4 +229,47 @@ export class PS_WorkOrder {
 
         return true;
     }
+}
+
+export function parseRoutingDate(date: string): Date {
+    let month: number = parseInt(date.split("/")[0].slice(-2));
+    let day: number = parseInt(date.split("/")[1]);
+    let year: number = parseInt(date.split("/")[2].slice(0, 4));
+    let hour: number = parseInt(date.split(":")[1].slice(-2));
+    let minute: number = parseInt(date.split(":")[2]);
+    let second: number = parseInt(date.split(":")[3].slice(0, 2));
+
+    // Convert 12hr to 24hr
+    if (date.split(";")[1].slice(-2) === "PM" && hour !== 12)
+        hour += 12;
+
+    if (date.split(";")[1].slice(-2) === "AM" && hour === 12)
+        hour -= 12;
+
+    return new Date(year, month - 1, day, hour, minute, second);
+}
+
+export function parseTrackingDate(date: string): Date | undefined {
+    if (date === '') return undefined;
+
+    let month: number = parseInt(date.split("-")[1]);
+    let day: number = parseInt(date.split("T")[0].slice(-2));
+    let year: number = parseInt(date.slice(0, 4));
+    let hour: number = parseInt(date.split("T")[1].slice(0, 2));
+    let minute: number = parseInt(date.split("T")[1].slice(2, 4));
+    let second: number = parseInt(date.split("T")[1].slice(4, 6));
+
+    // We take 8 or 7 hours away to convert from UTC to PST
+    // Note that the embedded date is in UTC
+    // Also, we need to account for DST...
+    let temp: Date = new Date(year, month - 1, day, hour, minute, second);
+    temp.setHours(isDST(temp) ? temp.getHours() - 7 : temp.getHours() - 8);
+
+    return temp;
+}
+
+function isDST(date: Date): boolean {
+    let jan = new Date(date.getFullYear(), 0, 1).getTimezoneOffset();
+    let jul = new Date(date.getFullYear(), 6, 1).getTimezoneOffset();
+    return Math.max(jan, jul) !== date.getTimezoneOffset();    
 }
