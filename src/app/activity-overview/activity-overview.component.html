@@ -19,9 +19,9 @@
               </tr>
             </thead>
             <tbody>
-              <ng-container *ngFor="let a of getDepartmentActivity(d)">
+              <ng-container *ngFor="let r of d.machines">
                 <tr>
-                  <td>{{a.name}}</td><td>{{a.active}}</td><td>{{a.mfgcomplete}}</td><td>{{a.shipped}}</td><td>{{a.invoiced}}</td>
+                  <td>{{r}}</td><td>{{getResourceActivityByStatus(r, 0)}}</td><td>{{getResourceActivityByStatus(r, 4)}}</td><td>{{getResourceActivityByStatus(r, 6)}}</td><td>{{getResourceActivityByStatus(r, 3)}}</td>
                 </tr>
              </ng-container>
             </tbody>
