@@ -43,3 +43,5 @@ Thumbs.db
 
 # Definitions file (company specific)
 /src/definitions.json
+
+/src/proxy.conf.json

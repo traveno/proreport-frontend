@@ -82,7 +82,8 @@
               "browserTarget": "shop-meister:build:production"
             },
             "development": {
-              "browserTarget": "shop-meister:build:development"
+              "browserTarget": "shop-meister:build:development",
+              "proxyConfig": "src/proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
