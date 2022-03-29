@@ -7,7 +7,7 @@ import $ from 'cash-dom';
   providedIn: 'root'
 })
 export class ConnectionsService {
-  private isConnected: boolean = false;
+  private isConnected: boolean = true;
   private userId: number = -1;
   private permissions = {
     workorders: false,
@@ -16,7 +16,7 @@ export class ConnectionsService {
   };
 
   constructor(private http: HttpClient) {
-    this.checkConnection();
+    // this.checkConnection();
   }
 
   getConnected(): boolean {
