@@ -19,8 +19,16 @@ export class ApiService {
     return this.http.get<PS_WorkOrder[]>(`/api/workorders/by_resource/${resource}`);
   }
 
+  getWorkOrdersByRoutingActivity(fromDate: Date, toDate: Date) {
+    return this.http.get<PS_WorkOrder[]>(`/api/workorders/by_routing_activity/${fromDate.toJSON()}/${toDate.toJSON()}`)
+  }
+
   getResourceActivity() {
     return this.http.get<Map<string, ResourceActivity>>('/api/resource_activity');
+  }
+
+  getRoutingRowsByDate(fromDate: Date, toDate: Date) {
+    return this.http.get<PS_RoutingRow>(`/api/routingrows/by_date/${fromDate.toJSON()}/${toDate.toJSON()}`);
   }
 }
 
@@ -28,11 +36,21 @@ export interface PS_WorkOrder {
   index: string;
   status: number;
   orderQuantity: number;
+  routingRows: PS_RoutingRow[];
 }
 
 export interface ResourceActivity {
-  active: number,
-  mfgcomplete: number,
-  shipped: number,
+  active: number;
+  mfgcomplete: number;
+  shipped: number;
   invoiced: number
+}
+
+export interface PS_RoutingRow {
+  id: number;
+  op: string;
+  opDesc: string;
+  resource: string;
+  completeTotal: number;
+  completeDate: Date;
 }
