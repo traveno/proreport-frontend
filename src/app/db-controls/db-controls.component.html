@@ -5,30 +5,23 @@
   </div>
   <div class="card-body">
     <div class="row align-items-center">
-      <div class="col text-center">
-        <input type="file" id="cache-input" name="Load cache file" (change)="loadDatabaseFromFile($event)">
-        <div class="btn-group" role="group">
-          <label for="cache-input" class="btn btn-lg btn-primary" placement="top" ngbTooltip="Import a database file">Load</label>
-          <button id="cache-save" type="button" class="btn btn-lg btn-primary" placement="top" ngbTooltip="Save database" (click)="saveDatabaseToFile()">Save</button>
-          <button type="button" class="btn btn-lg btn-primary" placement="top" ngbTooltip="Create a new database" (click)="openModal()">New</button>
-        </div>
-      </div>
+      
       <div class="col">
         <div class="card db-stats">
           <div class="card-body text-center">
             <table>
               <tbody>
                 <tr>
-                  <th scope="row" class="text-end">Status:</th>
-                  <td class="text-start">{{status}}</td>
+                  <th scope="row" class="text-end">Last Update:</th>
+                  <td class="text-start">{{this.getSimpleDate(updateStats.getLatestUpdateInfo().timeStarted)}}</td>
                 </tr>
                 <tr>
-                  <th scope="row" class="text-end">Entries:</th>
-                  <td class="text-start">{{entries}}</td>
+                  <th scope="row" class="text-end">Updated Entries:</th>
+                  <td class="text-start">{{updateStats.getLatestUpdateInfo().numRecordsUpdated}}</td>
                 </tr>
                 <tr>
-                  <th scope="row" class="text-end">Timestamp:</th>
-                  <td class="text-start">{{timestamp}}</td>
+                  <th scope="row" class="text-end">Total Entries:</th>
+                  <td class="text-start">{{updateStats.getTotalRecords()}}</td>
                 </tr>
               </tbody>
             </table>
