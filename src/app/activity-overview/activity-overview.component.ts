@@ -21,9 +21,9 @@ export class ActivityOverviewComponent implements OnInit {
   ngOnInit(): void {
     for (let dept of this.defService.getDefinitions().departments) {
       for (let machine of dept.machines) {
-        this.apiService.getWorkOrdersByResource(machine).subscribe(results => {
-          this.activityMap.set(machine, results);
-        });
+        // this.apiService.getWorkOrdersByResource(machine).subscribe(results => {
+        //   this.activityMap.set(machine, results);
+        // });
       }
     }
   }
