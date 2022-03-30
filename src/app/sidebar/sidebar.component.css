@@ -4,6 +4,16 @@
     min-height: 100%;
 }
 
+@media (max-width: 767px) {
+    .side-nav-bar {
+        display: none;
+    }
+
+    .fixed {
+        display: none;
+    }
+}
+
 .fixed {
     width: 8rem;
     position: fixed;

@@ -11,7 +11,8 @@ export class DashboardComponent implements OnInit {
   constructor(public dbService: DatabaseService) { }
 
   isDatabaseLoaded(): boolean {
-    return this.dbService.isInitialized();
+    // return this.dbService.isInitialized();
+    return true;
   }
 
   ngOnInit(): void {
