@@ -7,8 +7,18 @@ import { catchError, retry } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ApiService {
+  private globalWorkOrderList: PS_WorkOrder[] = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.http.get<PS_WorkOrder[]>('/api/workordersdetailed').subscribe(results => {
+      this.globalWorkOrderList = results;
+      console.log('done');
+    });
+  }
+
+  getWorkOrdersDetailedList(): PS_WorkOrder[] {
+    return this.globalWorkOrderList;
+  }
 
 
   getGlobalWorkOrderList() {
@@ -37,6 +47,7 @@ export interface PS_WorkOrder {
   status: number;
   orderQuantity: number;
   routingRows: PS_RoutingRow[];
+  trackingRows: PS_TrackingRow[];
 }
 
 export interface ResourceActivity {
@@ -47,10 +58,19 @@ export interface ResourceActivity {
 }
 
 export interface PS_RoutingRow {
-  id: number;
   op: string;
   opDesc: string;
   resource: string;
   completeTotal: number;
   completeDate: Date;
+}
+
+export interface PS_TrackingRow {
+    dateStarted: Date;
+    dateEnded: Date;
+    op: string;
+    resource: string;
+    quantityStart: number;
+    quantityEnd: number;
+    quantityTotal: number;
 }
