@@ -1,0 +1,21 @@
+<div class="card shadow">
+    <div class="card-header">
+        Work Order Lookup
+    </div>
+    <div class="card-body">
+        <input id="typeahead-prevent-manual-entry" type="text" class="form-control"
+            [(ngModel)]="model"
+            [ngbTypeahead]="search"
+            [inputFormatter]="formatter"
+            [resultFormatter]="formatter"
+            [editable]="false" />
+
+
+
+        <div *ngIf="model !== undefined">
+            <p>Index: {{model.index}}</p>
+            <p>Status: {{statusEnumToString(model.status)}}</p>
+            <p>Order Quantity: {{model.orderQuantity}}</p>
+        </div>
+    </div>
+</div>

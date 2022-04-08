@@ -1,7 +1,7 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -17,9 +17,9 @@ import { ReportingComponent } from './reporting/reporting.component';
 import { AppRoutingModule } from './app-routing.module';
 import { QuickButtonsComponent } from './quick-buttons/quick-buttons.component';
 import { DefinitionsService } from './definitions.service';
-import { async } from '@angular/core/testing';
 import { NgChartsModule } from 'ng2-charts';
 import { LineChartComponent } from './line-chart/line-chart.component';
+import { WorkorderComponent } from './workorder/workorder.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +34,8 @@ import { LineChartComponent } from './line-chart/line-chart.component';
     DashboardComponent,
     ReportingComponent,
     QuickButtonsComponent,
-    LineChartComponent
+    LineChartComponent,
+    WorkorderComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +44,7 @@ import { LineChartComponent } from './line-chart/line-chart.component';
     ReactiveFormsModule,
     AppRoutingModule,
     NgChartsModule,
+    FormsModule
   ],
   providers: [
     {
