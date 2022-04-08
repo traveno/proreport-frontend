@@ -20,6 +20,9 @@ export class ApiService {
     return this.globalWorkOrderList;
   }
 
+  getWorkOrder(index: string) {
+    return this.http.get<PS_WorkOrder>(`/api/workorder/${index}`);
+  }
 
   getGlobalWorkOrderList() {
     return this.http.get<PS_WorkOrder[]>('/api/workorders');
@@ -48,6 +51,10 @@ export interface PS_WorkOrder {
   orderQuantity: number;
   routingRows: PS_RoutingRow[];
   trackingRows: PS_TrackingRow[];
+  scheduledStartDate: Date | undefined;
+  scheduledTime: number;
+  scheduledSetupTime: number;
+  scheduledRunTime: number;
 }
 
 export interface ResourceActivity {
